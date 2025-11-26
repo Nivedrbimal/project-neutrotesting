@@ -178,9 +178,13 @@ const rad2deg = r => r * 180 / Math.PI;
 // ------ Favicon Selection ------
 function setFavicon() {
   const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const lightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
   const favicon = document.querySelector('link[rel="icon"]');
-  if(darkMode) favicon.href = 'faviconNRB.ico'; 
+  const faviconApple = document.querySelector('link[rel="apple-touch-icon"]');
+  if(darkMode) favicon.href = 'faviconNRB.ico';
   else favicon.href = 'faviconNRB.png';
+  if(darkMode) faviconApple.href = 'faviconNRB.png'; 
+  else faviconApple.href = 'faviconNRBAD.png';
 }
 setFavicon();
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setFavicon);
@@ -1985,206 +1989,191 @@ function ng_try() {
 
 
 // ------------- Monopoly -------------
-let roomId = null;
-let roomRef = null;
-let playerUID = null;
-let currentPlayerUID = null;
-const boardSpaces = [
-  { name: 'Go', type: 'corner' },
-  { name: 'Mediterranean Avenue', type: 'property', price: 60, color: 'brown' },
-  { name: 'Community Chest', type: 'chest' },
-  { name: 'Baltic Avenue', type: 'property', price: 60, color: 'brown' },
-  { name: 'Income Tax', type: 'tax', amount: 200 },
-  { name: 'Reading Railroad', type: 'railroad', price: 200 },
-  { name: 'Oriental Avenue', type: 'property', price: 100, color: 'lightblue' },
-  { name: 'Chance', type: 'chance' },
-  { name: 'Vermont Avenue', type: 'property', price: 100, color: 'lightblue' },
-  { name: 'Connecticut Avenue', type: 'property', price: 120, color: 'lightblue' },
-  { name: 'Jail / Just Visiting', type: 'corner' },
-  { name: 'St. Charles Place', type: 'property', price: 140, color: 'pink' },
-  { name: 'Electric Company', type: 'utility', price: 150 },
-  { name: 'States Avenue', type: 'property', price: 140, color: 'pink' },
-  { name: 'Virginia Avenue', type: 'property', price: 160, color: 'pink' },
-  { name: 'Pennsylvania Railroad', type: 'railroad', price: 200 },
-  { name: 'St. James Place', type: 'property', price: 180, color: 'orange' },
-  { name: 'Community Chest', type: 'chest' },
-  { name: 'Tennessee Avenue', type: 'property', price: 180, color: 'orange' },
-  { name: 'New York Avenue', type: 'property', price: 200, color: 'orange' },
-  { name: 'Free Parking', type: 'corner' },
-  { name: 'Kentucky Avenue', type: 'property', price: 220, color: 'red' },
-  { name: 'Chance', type: 'chance' },
-  { name: 'Indiana Avenue', type: 'property', price: 220, color: 'red' },
-  { name: 'Illinois Avenue', type: 'property', price: 240, color: 'red' },
-  { name: 'B. & O. Railroad', type: 'railroad', price: 200 },
-  { name: 'Atlantic Avenue', type: 'property', price: 260, color: 'yellow' },
-  { name: 'Ventnor Avenue', type: 'property', price: 260, color: 'yellow' },
-  { name: 'Water Works', type: 'utility', price: 150 },
-  { name: 'Marvin Gardens', type: 'property', price: 280, color: 'yellow' },
-  { name: 'Go To Jail', type: 'corner' },
-  { name: 'Pacific Avenue', type: 'property', price: 300, color: 'green' },
-  { name: 'North Carolina Avenue', type: 'property', price: 300, color: 'green' },
-  { name: 'Community Chest', type: 'chest' },
-  { name: 'Pennsylvania Avenue', type: 'property', price: 320, color: 'green' },
-  { name: 'Short Line Railroad', type: 'railroad', price: 200 },
-  { name: 'Chance', type: 'chance' },
-  { name: 'Park Place', type: 'property', price: 350, color: 'darkblue' },
-  { name: 'Luxury Tax', type: 'tax', amount: 100 },
-  { name: 'Boardwalk', type: 'property', price: 400, color: 'darkblue' }
-];
+const neutropolisGame = document.getElementById('neutropolisGame');
+if (!db || !currentUser) neutropolisGame.classList.add('hidden');
+const ngmi = document.getElementById('ngmi');
+const jngr = document.getElementById('jngr');
+const cngr = document.getElementById('cngr');
+const ngrc = document.getElementById('ngrc');
+[jngr, cngr, ngrc].forEach(el => {
+  if (el) {
+    el.classList.remove('visible');
+    el.classList.add('hidden');
+  }
+});
+function changengr() {
+  const mngr = document.getElementById('mngr').value;
+  if (mngr === 'jngr') {
+    ngmi.classList.add('hidden');
+    jngr.classList.remove('hidden');
+    mngr.value = 'selectngr';
+  }
+  else if (mngr === 'cngr') {
+    ngmi.classList.add('hidden');
+    cngr.classList.remove('hidden');
+    mngr.value = 'selectngr';
+  }
+}
+function backngr() {
+  [jngr, cngr, ngrc].forEach(el => {
+    if (el) {
+      el.classList.remove('visible');
+      el.classList.add('hidden');
+    }
+  });
+  ngmi.classList.remove('hidden');
+}
 
-function createPrivateRoom() {
-  if (!currentUser) return alert("Please sign in to create a room!");
-  playerUID = currentUser.uid;
-  roomId = 'room' + Math.floor(Math.random() * 100000);
-  roomRef = db.ref(`privateRooms/${roomId}`);
+async function crngr() {
+  if (!db || !currentUser) return;
+  const code = Math.random().toString(36).substring(2, 7).toUpperCase();
   const roomData = {
-    hostUID: playerUID,
-    settings: {
-      allowBots: false,
-      allowMortgage: false,
-      rentWhileInJail: true,
-      vacationMoney: false
-    },
-    players: {},
-    chat: {},
-    status: "waiting",
-    currentTurn: playerUID
-  };
-  roomRef.set(roomData);
-  addPlayerToRoom(playerUID, currentUser.displayName || currentUser.email);
-  document.getElementById('room-header').innerText = `Private Room: ${roomId}`;
-  document.getElementById('private-room').style.display = 'block';
-  renderBoard();
-  listenForRoomUpdates();
-}
-function addPlayerToRoom(uid, name) {
-  if (!roomRef) return;
-  roomRef.child(`players/${uid}`).set({
-    name: name,
-    money: 1500,
-    position: 0,
-    properties: []
-  });
-}
-function renderBoard() {
-  const boardDiv = document.getElementById('board-spaces');
-  boardDiv.innerHTML = '';
-  boardSpaces.forEach((space, i) => {
-    const div = document.createElement('div');
-    div.style.width = '90px';
-    div.style.height = '60px';
-    div.style.border = '1px solid black';
-    div.style.margin = '2px';
-    div.style.textAlign = 'center';
-    div.textContent = `${i}: ${space.name}`;
-    boardDiv.appendChild(div);
-  });
-}
-function listenForRoomUpdates() {
-  if (!roomRef) return;
-  roomRef.child('players').on('value', snapshot => {
-    const players = snapshot.val() || {};
-    const list = document.getElementById('players');
-    list.innerHTML = '';
-    Object.entries(players).forEach(([uid, p]) => {
-      const li = document.createElement('li');
-      li.textContent = `${p.name} - $${p.money} - Pos: ${p.position}`;
-      list.appendChild(li);
-    });
-  });
-  roomRef.child('chat').on('value', snapshot => {
-    const messages = snapshot.val() || {};
-    const chatList = document.getElementById('chat-messages');
-    chatList.innerHTML = '';
-    Object.values(messages).forEach(msg => {
-      const li = document.createElement('li');
-      li.textContent = `[${msg.sender}] ${msg.text}`;
-      chatList.appendChild(li);
-    });
-  });
-  roomRef.child('currentTurn').on('value', snapshot => {
-    currentPlayerUID = snapshot.val();
-    if (currentPlayerUID === playerUID) {
-      document.getElementById('roll-dice').disabled = false;
-    } else {
-      document.getElementById('roll-dice').disabled = true;
-    }
-  });
-}
-document.getElementById('roll-dice').addEventListener('click', () => {
-  if (!roomRef || playerUID !== currentPlayerUID) return;
-  const dice1 = Math.floor(Math.random() * 6) + 1;
-  const dice2 = Math.floor(Math.random() * 6) + 1;
-  const total = dice1 + dice2;
-  document.getElementById('dice-result').innerText = `You rolled: ${dice1} + ${dice2} = ${total}`;
-  movePlayer(total);
-});
-function movePlayer(steps) {
-  roomRef.child(`players/${playerUID}`).once('value').then(snapshot => {
-    const player = snapshot.val();
-    const newPosition = (player.position + steps) % boardSpaces.length;
-    const updates = { position: newPosition };
-    const space = boardSpaces[newPosition];
-    if (space.type === 'property' && (!player.properties || !player.properties.includes(space.name))) {
-      if (player.money >= space.price) {
-        updates.money = player.money - space.price;
-        updates.properties = [...(player.properties || []), space.name];
-        log(`${player.name} bought ${space.name} for $${space.price}`);
-      } else {
-        log(`${player.name} cannot afford ${space.name}`);
+    public: document.getElementById('ngrRoomPublic').checked,
+    maxPlayers: Number(document.getElementById('ngrMaxPlayers').value),
+    allowBots: document.getElementById('ngrAllowBots').checked,
+    allowMortgage: document.getElementById('ngrAllowMortgage').checked,
+    allowPrisonRent: document.getElementById('ngrAllowPrisonRent').checked,
+    allowAuction: document.getElementById('ngrAllowAuction').checked,
+    allowVacationCash: document.getElementById('ngrAllowVacationCash').checked,
+    allowDoubleRentSet: document.getElementById('ngrAllowDoubleRentSet').checked,
+    allowEvenBuild: document.getElementById('ngrAllowEvenBuild').checked,
+    allowRandomOrder: document.getElementById('ngrAllowRandomPlayerOrder').checked,
+    createdBy: currentUser,
+    players: {
+      [currentUser.uid]: {
+        name: currentUser.username || "Player",
+        money: 1500,
+        position: 0, 
+        properties: null
       }
+    },
+    gameState: {
+      started: false,
+      turn: currentUser.uid,
+      log: ["Room created"]
     }
-    roomRef.child(`players/${playerUID}`).update(updates).then(() => {
-      endTurn();
-    });
-  });
-}
-function endTurn() {
-  roomRef.child('players').once('value').then(snapshot => {
-    const players = Object.keys(snapshot.val());
-    const currentIndex = players.indexOf(currentPlayerUID);
-    const nextIndex = (currentIndex + 1) % players.length;
-    roomRef.child('currentTurn').set(players[nextIndex]);
-  });
-}
-function log(message) {
-  const logList = document.getElementById('log');
-  const li = document.createElement('li');
-  li.textContent = message;
-  logList.appendChild(li);
-}
-document.getElementById('send-chat').addEventListener('click', () => {
-  const text = document.getElementById('chat-input').value.trim();
-  if (!text || !playerUID || !roomRef) return;
-  const messageId = 'msg' + Date.now();
-  roomRef.child(`chat/${messageId}`).set({
-    sender: currentUser.displayName || currentUser.email,
-    text: text,
-    timestamp: Date.now()
-  });
-  document.getElementById('chat-input').value = '';
-});
-document.getElementById('save-settings').addEventListener('click', () => {
-  if (!roomRef) return;
-  const settings = {
-    allowBots: document.getElementById('allowBots').checked,
-    allowMortgage: document.getElementById('allowMortgage').checked,
-    rentWhileInJail: document.getElementById('rentWhileInJail').checked,
-    vacationMoney: document.getElementById('vacationMoney').checked
   };
-  roomRef.child('settings').set(settings);
-  alert("Settings saved!");
+  await set(ref(db, "rooms/" + code), roomData);
+  window.ngrRoomCode = code;
+  cngr.classList.add('hidden');
+  ngrc.classList.remove('hidden');
+  ngrc.classList.add('visible');
+  document.getElementById("ngbj").innerText = code;
+  loadRoom(window.ngrRoomCode);
+}
+function loadRoom(code) {
+  const roomRef = ref(db, "rooms/" + code);
+  onValue(roomRef, snap => {
+    const room = snap.val();
+    if (!room) return;
+    applySettings(room);
+    updatePlayerList(room.players);
+    updateGameState(room.gameState);
+    loadBoardProperties(room.properties || {});
+  });
+}
+function updatePlayerList(players) {
+  const container = document.getElementById("ngrcplc");
+  container.innerHTML = "";
+  Object.entries(players).forEach(([id, p]) => {
+    const div = document.createElement("div");
+    div.className = "ng-player";
+    div.innerHTML = `
+      <span class="name">${p.name}</span>
+      <span class="money">₦${p.money}</span>
+    `;
+    container.appendChild(div);
+  });
+}
+
+
+
+
+const ngrccis = document.getElementById('ngrccis');
+const ngrccit = document.getElementById('ngrccit');
+const ngrccm = document.getElementById('ngrccm');
+ngrccis.addEventListener('click', () => {
+  const msg = ngrccit.value.trim();
+  if(msg) {
+    const messageEl = document.createElement('div');
+    messageEl.classList.add('ngrccml', 'player');
+    messageEl.textContent = msg;
+    ngrccm.appendChild(messageEl);
+    ngrccit.value = '';
+    ngrccm.scrollTop = ngrccm.scrollHeight;
+    setTimeout(() => {
+      const botMsg = document.createElement('div');
+      botMsg.classList.add('ngrccml', 'opponent');
+      botMsg.textContent = "Opponent: " + msg.split('').reverse().join('');
+      ngrccm.appendChild(botMsg);
+      ngrccm.scrollTop = ngrccm.scrollHeight;
+    }, 500);
+  }
+});
+ngrccit.addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') ngrccis.click();
 });
 
-document.getElementById('start-game').addEventListener('click', () => {
-  if (!roomRef) return;
-  roomRef.child('status').set('inGame');
-  alert("Game started!");
+
+const dices = document.querySelectorAll(".cube");
+const baseRotations = {
+  1: { x: 0,   y: 0 },
+  2: { x: 90,  y: 0 },
+  3: { x: 0,   y: -90 },
+  4: { x: 0,   y: 90 },
+  5: { x: -90, y: 0 },
+  6: { x: 180, y: 0 }
+};
+const diceState = new Map();
+dices.forEach(d => diceState.set(d, { x: baseRotations[1].x, y: baseRotations[1].y }));
+let currentDiceValue1 = 1;
+let currentDiceValue2 = 1;
+function norm360(angle) {
+  return ((angle % 360) + 360) % 360;
+}
+function shortestDelta(current, target) {
+  const c = norm360(current);
+  const t = norm360(target);
+  let delta = t - c;
+  if (delta <= -180) delta += 360;
+  if (delta > 180) delta -= 360;
+  return delta;
+}
+function rollDice(dice) {
+  const state = diceState.get(dice);
+  const value = Math.floor(Math.random() * 6) + 1;
+  const target = baseRotations[value];
+  const turnsX = (Math.floor(Math.random() * 5) + 3) * 360;
+  const turnsY = (Math.floor(Math.random() * 5) + 3) * 360;
+  const deltaX = shortestDelta(state.x, target.x);
+  const deltaY = shortestDelta(state.y, target.y);
+  const finalX = state.x + turnsX + deltaX;
+  const finalY = state.y + turnsY + deltaY;
+  dice.style.transition = "transform 2s cubic-bezier(0.25,1,0.5,1)";
+  dice.style.transform = `
+    rotateX(${finalX}deg)
+    rotateY(${finalY}deg)
+  `;
+  diceState.set(dice, { x: finalX, y: finalY });
+  return value;
+}
+dices.forEach((dice, i) => {
+  dice.addEventListener("click", () => {
+    dices.forEach((d, idx) => {
+      const result = rollDice(d);
+      if (idx === 0) currentDiceValue1 = result;
+      if (idx === 1) currentDiceValue2 = result;
+    });
+    const lastDice = dices[dices.length - 1];
+    const onEnd = (ev) => {
+      if (ev.propertyName && ev.propertyName.includes("transform")) {
+        console.log(`Dice 1 value: ${currentDiceValue1}\nDice 2 value: ${currentDiceValue2}`);
+        lastDice.removeEventListener("transitionend", onEnd);
+      }
+    };
+    lastDice.addEventListener("transitionend", onEnd);
+  });
 });
-
-
-
-
 
 
 
@@ -2365,8 +2354,7 @@ function gameOver() {
     .then(snapshot => {
       snakePlayerNameValue = snapshot.val();
     });
-    const playerId = currentUser;
-    db.ref(`highScores/snakeGame/${playerId}`).set({
+    db.ref(`highScores/snakeGame/${currentUser}`).set({
       name: snakePlayerNameValue,
       score: snakeScore
     });
@@ -2948,8 +2936,7 @@ function jetShooterGameOver() {
       .then(snapshot => {
         jetPlayerNameValue = snapshot.val();
       });
-      const playerId = "player_" + Date.now();
-      db.ref(`highScores/jetShooterGame/${playerId}`).set({
+      db.ref(`highScores/jetShooterGame/${currentUser}`).set({
         name: jetPlayerNameValue,
         score: jetShooterScore
       });
