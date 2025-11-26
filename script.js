@@ -135,6 +135,7 @@ function startApp(user) {
         .then(() => console.log("Data written successfully!"))
         .catch(err => console.error("Write failed:", err));
         loadElementData();
+        neutropolisGame.classList.remove('hidden');
       db.ref(`users/${user.uid}/test`).on("value", snapshot => {
         console.log("Database value:", snapshot.val());
       });
@@ -1991,7 +1992,6 @@ function ng_try() {
 // ------------- Monopoly -------------
 const neutropolisGame = document.getElementById('neutropolisGame');
 if (!db || !currentUser) neutropolisGame.classList.add('hidden');
-if (db && currentUser) neutropolisGame.classList.remove('hidden');
 const ngmi = document.getElementById('ngmi');
 const jngr = document.getElementById('jngr');
 const cngr = document.getElementById('cngr');
@@ -2039,18 +2039,18 @@ async function crngr() {
     allowDoubleRentSet: document.getElementById('ngrAllowDoubleRentSet').checked,
     allowEvenBuild: document.getElementById('ngrAllowEvenBuild').checked,
     allowRandomOrder: document.getElementById('ngrAllowRandomPlayerOrder').checked,
-    createdBy: currentUser,
+    createdBy: currentUser.username,
     players: {
-      [currentUser.uid]: {
+      [currentUser.username]: {
         name: currentUser.username || "Player",
         money: 1500,
         position: 0, 
-        properties: null
+        properties: {}
       }
     },
     gameState: {
       started: false,
-      turn: currentUser.uid,
+      turn: currentUser.username,
       log: ["Room created"]
     }
   };
@@ -2355,7 +2355,7 @@ function gameOver() {
     .then(snapshot => {
       snakePlayerNameValue = snapshot.val();
     });
-    db.ref(`highScores/snakeGame/${currentUser}`).set({
+    db.ref(`highScores/snakeGame/${currentUser.username}`).set({
       name: snakePlayerNameValue,
       score: snakeScore
     });
@@ -2937,7 +2937,7 @@ function jetShooterGameOver() {
       .then(snapshot => {
         jetPlayerNameValue = snapshot.val();
       });
-      db.ref(`highScores/jetShooterGame/${currentUser}`).set({
+      db.ref(`highScores/jetShooterGame/${currentUser.username}`).set({
         name: jetPlayerNameValue,
         score: jetShooterScore
       });
