@@ -1,4 +1,4 @@
-self.FIREBASE_APPCHECK_DEBUG_TOKEN = "0E6DA563-74A3-4CD5-898B-461A7208F32E";
+
 firebase.initializeApp(def.firebaseConfig);
 firebase.appCheck().activate('6LdbiwcsAAAAAI1ZW4dAvR9yJuDT0sYBAaMtDmyF',true);
 const auth = firebase.auth();
@@ -443,12 +443,12 @@ if (!def.db || !def.currentUser) def.neutropolisGame.classList.add('hidden');
 });
 function changengr() {
   const mngr = document.getElementById('mngr').value;
-  if (mngr === 'def.jngr') {
+  if (mngr === 'jngr') {
     def.ngmi.classList.add('hidden');
     def.jngr.classList.remove('hidden');
     mngr.value = 'selectngr';
   }
-  else if (mngr === 'def.cngr') {
+  else if (mngr === 'cngr') {
     def.ngmi.classList.add('hidden');
     def.cngr.classList.remove('hidden');
     mngr.value = 'selectngr';
@@ -501,8 +501,7 @@ async function crngr() {
   loadRoom(window.ngrRoomCode);
 }
 function loadRoom(code) {
-  const roomRef = ref(def.db, "rooms/" + code);
-  onValue(roomRef, snap => {
+  def.db.ref(`rooms/${code}`).onValue(snap => {
     const room = snap.val();
     if (!room) return;
     applySettings(room);
