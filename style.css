@@ -1337,6 +1337,25 @@ input[type="checkbox"]:checked+.slider-switch::after {
   width:20%;
 }
 
+#ngrcglm {
+  position: absolute;
+  top:3vw;
+  width:calc(20vw - (4 * 0.2vw));
+  display:flex;
+  flex-direction:column-reverse;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0.5));
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0.5));
+}
+.ngrcglml {
+  width:calc(20vw - (4 * 0.2vw));
+  border: 0.2vw solid #000;
+  border-radius:0.5vw;
+  display:flex;
+  flex-direction:row;
+  padding: 0.2vw;
+  margin: 0.2vw;
+}
+
 #ngb {
   --big: 6.5;
   --small: 4vw;

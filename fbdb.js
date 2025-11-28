@@ -1,3 +1,4 @@
+self.FIREBASE_APPCHECK_DEBUG_TOKEN = "0E6DA563-74A3-4CD5-898B-461A7208F32E";
 firebase.initializeApp(def.firebaseConfig);
 firebase.appCheck().activate('6LdbiwcsAAAAAI1ZW4dAvR9yJuDT0sYBAaMtDmyF',true);
 const auth = firebase.auth();
@@ -487,8 +488,10 @@ async function crngr() {
     },
     gameState: {
       started: false,
+      ended: false,
       turn: def.currentUserName,
-      log: ["Room created"]
+      log: [`Room created ${code} by ${def.currentUserName}`],
+      chat: []
     }
   };
   def.db.ref(`rooms/${code}`).set(roomData);
@@ -520,6 +523,7 @@ async function joinngr() {
     properties: {}
   };
   await def.db.ref(`rooms/${ngrJoinCode}/players`).set(room.players);
+  addGameLog(ngrJoinCode, `${def.currentUserName} joined the room`);
   window.ngrRoomCode = ngrJoinCode;
   def.jngr.classList.add('hidden');
   def.ngrc.classList.remove('hidden');
@@ -527,16 +531,30 @@ async function joinngr() {
   loadRoom(window.ngrRoomCode);
 }
 function loadRoom(code) {
-  def.db.ref(`rooms/${code}`).once('value').then(snap => {
+  def.db.ref(`rooms/${code}`).on('value', snap => {
     const room = snap.val();
     if (!room) return;
-    updatePlayerList(room.players);
-    // applySettings(room);
-    // updateGameState(room.gameState);
-    // loadBoardProperties(room.properties || {});
+    ngrcplu(room.players);
+    ngrcgu(room.gameState.log);
+    ngrcgcu(room.gameState.chat);
   });
 }
-function updatePlayerList(players) {
+function addGameLog(code, msg) {
+  def.db.ref(`rooms/${code}/gameState/log`).transaction(log => {
+    if (!log) log = [];
+    log.push(msg);
+    return log;
+  });
+}
+function addChatMsg(code, sender, msg) {
+  const chatMsg = {sender, msg};
+  def.db.ref(`rooms/${code}/gameState/chat`).transaction(chat => {
+    if (!chat) chat = [];
+    chat.push(chatMsg);
+    return chat;
+  });
+}
+function ngrcplu(players) {
   const container = document.getElementById("ngrcplc");
   container.innerHTML = "";
   Object.entries(players).forEach(([id, p]) => {
@@ -549,30 +567,39 @@ function updatePlayerList(players) {
     container.appendChild(div);
   });
 }
-
-
-
-
+function ngrcgu(gamelog) {
+  const ngrcglm = document.getElementById('ngrcglm');
+  ngrcglm.innerHTML = "";
+  gamelog.forEach(line => {
+    const div = document.createElement("div");
+    div.className = "ngrcglml muted";
+    div.innerText = line;
+    ngrcglm.appendChild(div);
+  });
+}
+function ngrcgcu(gameChat) {
+  if (!gameChat || !Array.isArray(gameChat)) return;
+  const ngrccm = document.getElementById("ngrccm");
+  ngrccm.innerHTML = "";
+  gameChat.forEach((chat) => {
+    const div = document.createElement("div");
+    div.className = "ngrccml";
+    if (chat.sender === def.currentUserName) div.className = "ngrccml player";
+    else div.className = "ngrccml opponent";
+      div.innerHTML = `
+      <span class="ngrccml muted">${chat.sender}: ${chat.msg}</span>
+    `;
+    ngrccm.appendChild(div);
+  });
+}
 const ngrccis = document.getElementById('ngrccis');
 const ngrccit = document.getElementById('ngrccit');
 const ngrccm = document.getElementById('ngrccm');
 ngrccis.addEventListener('click', () => {
   const msg = ngrccit.value.trim();
-  if(msg) {
-    const messageEl = document.createElement('div');
-    messageEl.classList.add('ngrccml', 'player');
-    messageEl.textContent = msg;
-    ngrccm.appendChild(messageEl);
-    ngrccit.value = '';
-    ngrccm.scrollTop = ngrccm.scrollHeight;
-    setTimeout(() => {
-      const botMsg = document.createElement('div');
-      botMsg.classList.add('ngrccml', 'opponent');
-      botMsg.textContent = "Opponent: " + msg.split('').reverse().join('');
-      ngrccm.appendChild(botMsg);
-      ngrccm.scrollTop = ngrccm.scrollHeight;
-    }, 500);
-  }
+  addChatMsg(window.ngrRoomCode, def.currentUserName, msg);
+  ngrccit.value = '';
+  ngrccm.scrollTop = ngrccm.scrollHeight;
 });
 ngrccit.addEventListener('keypress', (e) => {
   if(e.key === 'Enter') ngrccis.click();
