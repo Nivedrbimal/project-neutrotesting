@@ -1,4 +1,3 @@
-self.FIREBASE_APPCHECK_DEBUG_TOKEN = "0E6DA563-74A3-4CD5-898B-461A7208F32E";
 firebase.initializeApp(def.firebaseConfig);
 firebase.appCheck().activate('6LdbiwcsAAAAAI1ZW4dAvR9yJuDT0sYBAaMtDmyF',true);
 const auth = firebase.auth();
@@ -433,8 +432,8 @@ function ptInfoClear() {
 
 // ========== GAMES ==========
 
-// ------------- Monopoly -------------
-if (!def.db || !def.currentUser) def.neutropolisGame.classList.add('hidden');
+// // ------------- Monopoly -------------
+// if (!def.db || !def.currentUser) def.neutropolisGame.classList.add('hidden');
 [def.jngr, def.cngr, def.ngrc].forEach(el => {
   if (el) {
     el.classList.remove('visible');
@@ -469,7 +468,6 @@ async function crngr() {
   const roomData = {
     public: document.getElementById('ngrRoomPublic').checked,
     maxPlayers: Number(document.getElementById('ngrMaxPlayers').value),
-    allowBots: document.getElementById('ngrAllowBots').checked,
     allowMortgage: document.getElementById('ngrAllowMortgage').checked,
     allowPrisonRent: document.getElementById('ngrAllowPrisonRent').checked,
     allowAuction: document.getElementById('ngrAllowAuction').checked,
@@ -483,13 +481,15 @@ async function crngr() {
         name: def.currentUserName || "Player",
         money: 1500,
         position: 0, 
+        turn: 0,
+        color: "red",
         properties: {}
       }
     },
     gameState: {
       started: false,
       ended: false,
-      turn: def.currentUserName,
+      turn: 0,
       log: [`Room created ${code} by ${def.currentUserName}`],
       chat: []
     }
@@ -512,18 +512,25 @@ async function joinngr() {
     jngrOut.textContent = "Room not found!";
     return;
   }
-  if (Object.keys(room.players).length >= room.maxPlayers) {
+  if (def.currentUserName != room.players[def.currentUserName]) 
+    jngrOut.textContent = "Rejoining room.";
+  else if (Object.keys(room.players).length >= room.maxPlayers) {
     jngrOut.textContent = "Room is full!";
     return;
   }
-  room.players[def.currentUserName] = {
-    name: def.currentUserName || "Player",
-    money: 1500,
-    position: 0,
-    properties: {}
-  };
+  if(def.currentUserName != room.players[def.currentUserName]) {
+    room.players[def.currentUserName] = {
+      name: def.currentUserName || "Player",
+      money: 1500,
+      position: 0,
+      turn: 2, 
+      color: "blue",
+      properties: {}
+    };
+  }
   await def.db.ref(`rooms/${ngrJoinCode}/players`).set(room.players);
-  addGameLog(ngrJoinCode, `${def.currentUserName} joined the room`);
+  if (def.currentUserName != room.players[def.currentUserName]) addGameLog(ngrJoinCode, `${def.currentUserName} rejoined the room`);
+  else addGameLog(ngrJoinCode, `${def.currentUserName} joined the room`);
   window.ngrRoomCode = ngrJoinCode;
   def.jngr.classList.add('hidden');
   def.ngrc.classList.remove('hidden');
@@ -537,6 +544,8 @@ function loadRoom(code) {
     ngrcplu(room.players);
     ngrcgu(room.gameState.log);
     ngrcgcu(room.gameState.chat);
+    ngrcpmu(room.players);
+    // ngrcppu(room.players[def.currentUserName], room.gameState);
   });
 }
 function addGameLog(code, msg) {
@@ -565,6 +574,21 @@ function ngrcplu(players) {
       <span class="ngrcplpm muted">₦${p.money}</span>
     `;
     container.appendChild(div);
+  });
+}
+function ngrcpmu(players) {
+  document.querySelectorAll('.ngbcpp').forEach(el => el.remove());
+  Object.values(players).forEach((player) => {
+    const playerCharacter = document.createElement("div");
+    const pColor = player.color || 'red'; 
+    playerCharacter.className = `ngbcpp ${pColor}`;
+    const targetDiv = document.getElementById(`ngbpp${player.position}`);
+    if (targetDiv) {
+      targetDiv.append(playerCharacter);
+    } 
+    else {
+      console.warn(`Board position element #${player.position} not found.`);
+    }
   });
 }
 function ngrcgu(gamelog) {
@@ -604,8 +628,6 @@ ngrccis.addEventListener('click', () => {
 ngrccit.addEventListener('keypress', (e) => {
   if(e.key === 'Enter') ngrccis.click();
 });
-
-
 const dices = document.querySelectorAll(".cube");
 const baseRotations = {
   1: { x: 0,   y: 0 },
@@ -648,24 +670,192 @@ function rollDice(dice) {
   diceState.set(dice, { x: finalX, y: finalY });
   return value;
 }
-dices.forEach((dice, i) => {
-  dice.addEventListener("click", () => {
-    dices.forEach((d, idx) => {
-      const result = rollDice(d);
-      if (idx === 0) currentDiceValue1 = result;
-      if (idx === 1) currentDiceValue2 = result;
-    });
-    const lastDice = dices[dices.length - 1];
-    const onEnd = (ev) => {
-      if (ev.propertyName && ev.propertyName.includes("transform")) {
-        console.log(`Dice 1 value: ${currentDiceValue1}\nDice 2 value: ${currentDiceValue2}`);
-        lastDice.removeEventListener("transitionend", onEnd);
-      }
-    };
-    lastDice.addEventListener("transitionend", onEnd);
-  });
-});
+const NGB_BOARD = [
+  { type: "go", name: "WhiteHole" },
+  { type: "property", name: "Vesta", price: 60, color: "brown", rent: [2,10,30,90,160,250] },
+  { type: "chance", name: "Wormhole" },
+  { type: "property", name: "Pallas", price: 60, color: "brown", rent: [4,20,60,180,320,450] },        // 3
+  { type: "tax", amount: 0.10, name: "Cosmo Tax" },        // 4
+  { type: "railroad", name: "NASA", price: 200, rent: [25,50,100,200] },                              // 5
+  { type: "property", name: "Ceres", price: 100, color: "lightblue", rent: [6,30,90,270,400,550] },    // 6
+  { type: "community", name: "Rift" },                     // 7
+  { type: "property", name: "Haumea", price: 100, color: "lightblue", rent: [6,30,90,270,400,550] },   // 8
+  { type: "property", name: "Eris", price: 120, color: "lightblue", rent: [8,40,100,300,450,600] },     // 9
+  { type: "jail_visit", name: "Event Horizon" },           // 10
+  { type: "property", name: "Europa", price: 140, color: "pink", rent: [10,50,150,450,625,750] },      // 11
+  { type: "utility", name: "SpaceX Grid", price: 150 },    // 12
+  { type: "property", name: "Enceladus", price: 140, color: "pink", rent: [10,50,150,450,625,750] },   // 13
+  { type: "property", name: "Titan", price: 160, color: "pink", rent: [12,60,180,500,700,900] },       // 14
+  { type: "railroad", name: "JAXA", price: 200, rent: [25,50,100,200] },                              // 15
+  { type: "property", name: "Halley", price: 180, color: "orange", rent: [14,70,200,550,750,950] },    // 16
+  { type: "chance", name: "Wormhole" },                    // 17
+  { type: "property", name: "Swift", price: 180, color: "orange", rent: [14,70,200,550,750,950] },     // 18
+  { type: "property", name: "Encke", price: 200, color: "orange", rent: [16,80,220,600,800,1000] },    // 19
+  { type: "free", name: "Neutron" },                       // 20
+  { type: "property", name: "Mercury", price: 220, color: "red", rent: [18,90,250,700,875,1050] },
+  { type: "community", name: "Rift" },                     // 22
+  { type: "property", name: "Venus", price: 220, color: "red", rent: [18,90,250,700,875,1050] },
+  { type: "property", name: "Earth", price: 240, color: "red", rent: [20,100,300,750,925,1100] },
+  { type: "railroad", name: "ESA", price: 200, rent: [25,50,100,200] },
+  { type: "property", name: "Mars", price: 260, color: "yellow", rent: [22,110,330,800,975,1150] },
+  { type: "property", name: "Jupiter", price: 260, color: "yellow", rent: [22,110,330,800,975,1150] },
+  { type: "utility", name: "Hydro Core", price: 150 },     // 28
+  { type: "property", name: "Saturn", price: 280, color: "yellow", rent: [24,120,360,850,1025,1200] },
+  { type: "go_to_jail", name: "BlackHole" },               // 30
+  { type: "property", name: "Uranus", price: 300, color: "green", rent: [26,130,390,900,1100,1275] },
+  { type: "property", name: "Neptune", price: 300, color: "green", rent: [26,130,390,900,1100,1275] },
+  { type: "chance", name: "Wormhole" },                    // 33
+  { type: "property", name: "PlanetX", price: 320, color: "green", rent: [28,150,450,1000,1200,1400] },
+  { type: "railroad", name: "ISRO", price: 200, rent: [25,50,100,200] },
+  { type: "community", name: "Rift" },                     // 36
+  { type: "property", name: "Sun", price: 350, color: "darkblue", rent: [35,175,500,1100,1300,1500] },
+  { type: "tax", amount: 75, name: "Prisma Tax" },
+  { type: "property", name: "Neutrox", price: 400, color: "darkblue", rent: [50,200,600,1400,1700,2000] }
+];
 
+// function ngrcppu(player, gameState) {
+//   while(gameState.turn === player.turn) {
+//     if(gameState.turn === player.turn) {
+//       dices.forEach((dice, i) => {
+//         dice.addEventListener("click", () => {
+//           dices.forEach((d, idx) => {
+//             const result = rollDice(d);
+//             if (idx === 0) currentDiceValue1 = result;
+//             if (idx === 1) currentDiceValue2 = result;
+//           });
+//           const lastDice = dices[dices.length - 1];
+//           const onEnd = (ev) => {
+//             if (ev.propertyName && ev.propertyName.includes("transform")) {
+//               console.log(`Dice 1 value: ${currentDiceValue1}\nDice 2 value: ${currentDiceValue2}`);
+//               lastDice.removeEventListener("transitionend", onEnd);
+//             }
+//           };
+//           lastDice.addEventListener("transitionend", onEnd);
+//           // handleDiceResult(window.ngrRoomCode, def.currentUserName, currentDiceValue1, currentDiceValue2);
+//         });
+//       });
+//       player.position+= (currentDiceValue1 + currentDiceValue2);
+//       if (currentDiceValue1 != currentDiceValue2) gameState.turn+=1;
+//     }
+//   }
+// }
+// async function handleDiceResult(roomCode, playerName, d1, d2) {
+//   const snap = await def.db.ref(`rooms/${roomCode}`).once("value");
+//   const room = snap.val();
+//   if (!room) return;
+//   const player = room.players[playerName];
+//   const doubles = d1 === d2;
+//   player.doubles = (player.doubles || 0);
+//   if (doubles) {
+//     player.doubles++;
+//     if (player.doubles >= 3) {
+//       player.position = 11;
+//       player.inJail = true;
+//       player.doubles = 0;
+//       room.gameState.turn++;
+//       await savePlayer(roomCode, playerName, player);
+//       addGameLog(roomCode, `${playerName} rolled 3 doubles and went to Jail`);
+//       return;
+//     }
+//   } else {
+//     player.doubles = 0;
+//   }
+//   let newPos = player.position + d1 + d2;
+//   if (newPos >= 40) {
+//     newPos -= 40;
+//     player.money += 200;
+//     addGameLog(roomCode, `${playerName} passed GO and collected $200`);
+//   }
+//   player.position = newPos;
+//   await savePlayer(roomCode, playerName, player);
+//   await handleTileEffect(roomCode, playerName, newPos);
+//   if (!doubles) {
+//     room.gameState.turn++;
+//     await def.db.ref(`rooms/${roomCode}/gameState/turn`).set(room.gameState.turn);
+//   }
+// }
+// async function savePlayer(roomCode, playerName, player) {
+//   await def.db.ref(`rooms/${roomCode}/players/${playerName}`).set(player);
+// }
+// function handleTileEffect(roomCode, player, tileIndex) {
+//   const tile = NGB_BOARD[tileIndex];
+//   if (tile.type === "go") {
+//     addGameLog(roomCode, `${player.name} landed on GO`);
+//     return;
+//   }
+//   if (tile.type === "jail_visit") {
+//     addGameLog(roomCode, `${player.name} is just visiting Event Horizon`);
+//     return;
+//   }
+//   if (tile.type === "go_to_jail") {
+//     player.position = 11;
+//     player.inJail = true;
+//     addGameLog(roomCode, `${player.name} was sucked into the BlackHole and sent to Jail`);
+//     return savePlayer(roomCode, player.name, player);
+//   }
+//   if (tile.type === "chance") {
+//     drawChanceCard(roomCode, player);
+//     return;
+//   }
+//   if (tile.type === "community") {
+//     drawCommunityCard(roomCode, player);
+//     return;
+//   }
+//   if (tile.type === "tax") {
+//     const amount = tile.amount < 1 ? Math.floor(player.money * tile.amount) : tile.amount;
+//     player.money -= amount;
+//     addGameLog(roomCode, `${player.name} paid ₦${amount} in taxes`);
+//     return savePlayer(roomCode, player.name, player);
+//   }
+//   if (tile.type === "railroad" || tile.type === "property" || tile.type === "utility") {
+//     return checkProperty(roomCode, player, tileIndex);
+//   }
+// }
+
+// async function applyCard(roomCode, playerName, card) {
+//   addGameLog(roomCode, `${playerName} drew: ${card.message}`);
+//   const snap = await def.db.ref(`rooms/${roomCode}`).once("value");
+//   const room = snap.val();
+//   const player = room.players[playerName];
+//   if (card.type === "money") {
+//     player.money += card.amount;
+//     return savePlayer(roomCode, playerName, player);
+//   }
+//   if (card.type === "move") {
+//     player.position = card.to;
+//     await savePlayer(roomCode, playerName, player);
+//     return handleTileEffect(roomCode, playerName, card.to);
+//   }
+//   if (card.type === "jail") {
+//     player.position = 11;
+//     player.inJail = true;
+//     return savePlayer(roomCode, playerName, player);
+//   }
+//   if (card.type === "jailfree") {
+//     player.jailFree = true;
+//     return savePlayer(roomCode, playerName, player);
+//   }
+// }
+// async function startPurchaseFlow(roomCode, playerName, pos, tile) {
+//   // Here you show your UI buttons
+//   // "Buy" → buyProperty(...)
+//   // "Auction" → startAuction(...)
+// }
+
+// async function buyProperty(roomCode, playerName, pos, tile) {
+//   const snap = await def.db.ref(`rooms/${roomCode}`).once("value");
+//   const room = snap.val();
+//   const player = room.players[playerName];
+//   if (player.money < tile.price) {
+//     addGameLog(roomCode, `${playerName} cannot afford ${tile.name}`);
+//     return;
+//   }
+//   player.money -= tile.price;
+//   tile.owner = playerName;
+//   await def.db.ref(`rooms/${roomCode}/players/${playerName}`).set(player);
+//   await def.db.ref(`rooms/${roomCode}/board/${pos}`).set(tile);
+//   addGameLog(roomCode, `${playerName} bought ${tile.name}`);
+// }
 
 
 // -------------- Snake Game -------------
