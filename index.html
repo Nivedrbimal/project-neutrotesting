@@ -1,11 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1.0" />
-  <title>NRB CodeWorks</title>
-  <link rel="icon" href="faviconNRB.ico" type="image/x-icon">
+  <title>Neutroxity</title>
+  <link rel="icon" href="faviconNRB.png" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="faviconNRB.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="faviconNRB.png">
+  <link rel="apple-touch-icon" href="faviconNRB.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="faviconNRB.png">
   <link rel="stylesheet" href="style.css" />
   <meta name="author" content="Nived" />
 </head>
@@ -14,16 +18,26 @@
   <!-- Intro Screen -->
   <div id="intro" class="intro-screen" role="dialog" aria-labelledby="intro-text" aria-modal="true">
     <div class="intro-content">
-      <img src="faviconNRB.ico" alt="" class="intro-logo" />
-      <h1 id="intro-text">Welcome to <span>NRB CodeWorks</span></h1>
+      <img src="faviconNRB1.png" alt="" class="intro-logo1" />
+      <img src="faviconNRB2.png" alt="" class="intro-logo2" />
+      <img src="faviconNRB3.png" alt="" class="intro-logo3" />
+      <div class="intro-body">
+        <h1 id="intro-text">Welcome to</h1>
+        <div class="text-container">
+          <span class="nrb-outline">Neutroxity</span>
+          <span class="nrb-gradient">
+            <span class="nrb-gradient-fill">Neutroxity</span>
+          </span>
+        </div>
+      </div>
       <p class="sr-only" id="intro-desc">Intro screen will auto-close and reveal the site.</p>
     </div>
   </div>
   <!-- Header -->
   <header class="main-header hidden" id="mainHeader" role="banner">
     <div class="logo-area" aria-hidden="false">
-      <img class="logo" src="faviconNRB.ico" alt="NRB CodeWorks Logo">
-      <h1>NRB CodeWorks</h1>
+      <img class="logo" src="faviconNRB.png" alt="Neutroxity Logo">
+      <h1>Neutroxity</h1>
     </div>
 
     <nav id="topNav" class="top-nav" role="navigation" aria-label="Top links">
@@ -61,7 +75,6 @@
     </nav>
     <button id="toggleSidebar" class="toggle-btn" aria-label="Toggle sidebar">☰</button>
   </aside>
-
   <!-- App -->
   <main id="app" class="hidden" role="main" tabindex="-1">
 
@@ -93,6 +106,26 @@
           </label>
         </div>
         <div class="row">
+          <label><span class="muted">Select to which digit to round to:</span>
+            <select id="genCalcRound">
+              <option value="select" disabled selected>Select</option>
+              <option value="1">Whole Number</option>
+              <option value="10">Tenth</option>
+              <option value="100">Hundredth</option>
+              <option value="1000">Thousandth</option>
+              <option value="10000">Ten Thousandth</option>
+              <option value="0">Don't Round</option>
+            </select>
+          </label>
+          <label><span class="muted">If doing trigonomentric equations, select mode of angle:</span>
+            <select id="genCalcAngleMode">
+              <option value="select" disabled selected>Select</option>
+              <option value="deg">Degree</option>
+              <option value="rad">Radian</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
           <button class="btn primary" onclick="genCalcCompute()">Compute</button>
           <button class="btn" onclick="genCalcClear()">Clear</button>
         </div>
@@ -101,19 +134,18 @@
 
       <!-- Trig Evaluator -->
       <div class="card" role="region" aria-labelledby="trigTitle">
-        <h3 id="trigTitle">Trigonometric evaluator</h3>
-        <p class="muted">Supports basic, inverse and hyperbolic trigonometric functions. Choose degrees, radians or
-          polar.</p>
+        <h3 id="trigTitle">Trigonometric Evaluator</h3>
+        <p class="muted">
+          Supports basic, inverse, hyperbolic functions and polar input.
+        </p>
 
         <div class="grid">
           <label><span class="muted">Mode</span>
             <select id="triMode" aria-label="trig mode" onchange="updatePlaceholder()">
               <option value="deg">Degrees</option>
               <option value="rad">Radians</option>
-              <option value="pol">Polar</option>
             </select>
           </label>
-
           <label><span class="muted">Operation</span>
             <select id="triOp" aria-label="trig operation" onchange="updatePlaceholder()">
               <option value="sin">sin</option>
@@ -136,9 +168,11 @@
               <option value="coth">coth</option>
             </select>
           </label>
-
-          <label><span class="muted">Input (Use the pi symbol(π) when doing radians)</span>
-            <input id="triVal" type="text" step="any" placeholder="Enter in degree(s)" aria-label="trig input" />
+          <label><span class="muted">Input</span>
+            <input id="triVal" type="text" placeholder="Enter value" aria-label="trig input" />
+          </label>
+          <label><span class="muted">Polar Input</span>
+            <input id="triPolar" type="text" placeholder="r∠θ (e.g. 5∠30°)" aria-label="polar input" />
           </label>
         </div>
 
@@ -165,30 +199,22 @@
             <input id="quadC" type="number" step="any" placeholder="Value of 'c'" aria-label="quad c input" />
           </label>
           <label><span class="muted">Enter value of 'x₁', leave blank if unknown</span>
-            <input id="quadX1" type="number" step="any" placeholder="first solution for x₁"
-              aria-label="quad x₁ input" />
+            <input id="quadX1" type="number" step="any" placeholder="value x₁" aria-label="quad x₁ input" />
           </label>
           <label><span class="muted">Enter value of 'x₂', leave blank if unknown</span>
-            <input id="quadX2" type="number" step="any" placeholder="second solution for x₂"
-              aria-label="quad x₂ input" />
+            <input id="quadX2" type="number" step="any" placeholder="value of x₂" aria-label="quad x₂ input" />
           </label>
-        </div>
-        <div class="grid">
           <label><span class="muted">Enter value of 'h', leave blank if unknown</span>
-            <input id="quadH" type="number" step="any" placeholder="x-coordinate of vertex'"
-              aria-label="quad h input" />
+            <input id="quadH" type="number" step="any" placeholder="x of vertex" aria-label="quad h input" />
           </label>
           <label><span class="muted">Enter value of 'k', leave blank if unknown</span>
-            <input id="quadK" type="number" step="any" placeholder="y-coordinate of vertex'"
-              aria-label="quad k input" />
+            <input id="quadK" type="number" step="any" placeholder="y of vertex" aria-label="quad k input" />
           </label>
           <label><span class="muted">Enter value of 'x', leave blank if unknown</span>
-            <input id="quadPx" type="number" step="any" placeholder="x-coordinate of known point'"
-              aria-label="quad x input" />
+            <input id="quadPx" type="number" step="any" placeholder="x of known point" aria-label="quad x input" />
           </label>
           <label><span class="muted">Enter value of 'y', leave blank if unknown</span>
-            <input id="quadPy" type="number" step="any" placeholder="y-coordinate of known point'"
-              aria-label="quad y input" />
+            <input id="quadPy" type="number" step="any" placeholder="y of known point" aria-label="quad y input" />
           </label>
 
         </div>
@@ -197,6 +223,486 @@
           <button class="btn" onclick="quadeClear()">Clear</button>
         </div>
         <div id="quadOut" class="output mono" role="status" aria-live="polite"></div>
+      </div>
+
+      <!-- 2D Shapes Calculator -->
+      <div class="card" role="region" aria-labelledby="shapesTitle">
+        <h3 id="shapesTitle">2D Shapes Calculator</h3>
+        <p class="muted">Calculate perimeter, area, or any value of various 2D shapes.</p>
+        <div class="row">
+          <label><span class="muted">Shape</span>
+            <select id="shape2D" aria-label="2D shape selection" onchange="showShape2DInputs()">
+              <option value="select" disabled selected>Select a shape</option>
+              <!-- <option value="semicircle">Semicircle</option> -->
+              <option value="circle">Circle</option>
+              <option value="triangle">Triangle</option>
+              <option value="square">Square</option>
+              <option value="rectangle">Rectangle</option>
+              <option value="parallelogram">Parallelogram</option>
+              <option value="trapezoid">Trapezoid</option>
+              <option value="kite">Kite</option>
+              <option value="ellipse">Ellipse</option>
+              <option value="regularPolygon">Regular Polygon</option>
+            </select>
+          </label>
+        </div>
+        <!-- <div class="grid" id="shapes2DSemicircleGrid">
+          <div class="row">
+            <p class="muted">Semicircle Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <label><span class="muted">Radius (r)</span>
+            <input id="shape2DSemicircleRadius" type="number" step="any" placeholder="Enter radius" aria-label="semicircle radius"/>
+          </label>
+          <label><span class="muted">Diameter (d)</span>
+            <input id="shape2DSemicircleDiameter" type="number" step="any" placeholder="Enter diameter" aria-label="semicircle diameter"/>
+          </label>
+          <label><span class="muted">Circumference (C)</span>
+            <input id="shape2DSemicircleCircumference" type="number" step="any" placeholder="Enter circumference" aria-label="semicircle circumference"/>
+          </label>
+          <label><span class="muted">Area (A)</span>
+            <input id="shape2DSemicircleArea" type="number" step="any" placeholder="Enter area" aria-label="semicircle area"/>
+          </label>
+          <label><span class="muted">Segment Height (h)</span>
+        </div> -->
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DCircleGrid">
+          <div class="row">
+            <p class="muted">Circle Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Radius (r)</span>
+              <input id="shape2DCircleRadius" type="number" step="any" placeholder="Enter radius"
+                aria-label="circle radius" />
+            </label>
+            <label><span class="muted">Diameter (d)</span>
+              <input id="shape2DCircleDiameter" type="number" step="any" placeholder="Enter diameter"
+                aria-label="circle diameter" />
+            </label>
+            <label><span class="muted">Circumference (C)</span>
+              <input id="shape2DCircleCircumference" type="number" step="any" placeholder="Enter circumference"
+                aria-label="circle circumference" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DCircleArea" type="number" step="any" placeholder="Enter area"
+                aria-label="circle area" />
+            </label>
+            <label><span class="muted">Sector Area (SA)</span>
+              <input id="shape2DCircleSectorArea" type="number" step="any" placeholder="Enter sector area"
+                aria-label="circle sector area" />
+            </label>
+            <label><span class="muted">Arc Length (L)</span>
+              <input id="shape2DCircleArcLength" type="number" step="any" placeholder="Enter arc length"
+                aria-label="circle arc length" />
+            </label>
+            <label><span class="muted">Central Angle (θ in degrees) if doing sector calculations</span>
+              <input id="shape2DCircleCentralAngle" type="number" step="any" placeholder="Enter central angle"
+                aria-label="circle central angle" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DTriangleGrid">
+          <div class="row">
+            <p class="muted">Triangle Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Triangle type based on angle</span>
+              <select id="shape2DTriangleAngleType" aria-label="triangle type angle">
+                <option value="">Select type</option>
+                <option value="acute">Acute</option>
+                <option value="right">Right</option>
+                <option value="obtuse">Obtuse</option>
+              </select>
+            </label>
+            <label><span class="muted">Triangle type based on sides</span>
+              <select id="shape2DTriangleSideType" aria-label="triangle type side">
+                <option value="">Select type</option>
+                <option value="equilateral">Equilateral</option>
+                <option value="isosceles">Isosceles</option>
+                <option value="scalene">Scalene</option>
+              </select>
+            </label>
+            <label><span class="muted">Base (b = side a)</span>
+              <input id="shape2DTriangleBase" type="number" step="any" placeholder="Enter base"
+                aria-label="triangle base" />
+            </label>
+            <label><span class="muted">Height 1 (height relative to side a)</span>
+              <input id="shape2DTriangleHeight1" type="number" step="any" placeholder="Enter height"
+                aria-label="triangle height" />
+            </label>
+            <label><span class="muted">Height 2 (height relative to side b)</span>
+              <input id="shape2DTriangleHeight2" type="number" step="any" placeholder="Enter height"
+                aria-label="triangle height" />
+            </label>
+            <label><span class="muted">Height 3 (height relative to side c)</span>
+              <input id="shape2DTriangleHeight3" type="number" step="any" placeholder="Enter height"
+                aria-label="triangle height" />
+            </label>
+            <label><span class="muted">Midsegment 1 (mid1)</span>
+              <input id="shape2DTriangleMidsegment1" type="number" step="any" placeholder="Enter midsegment 1"
+                aria-label="triangle midsegment 1" />
+            </label>
+            <label><span class="muted">Midsegment 2 (mid2)</span>
+              <input id="shape2DTriangleMidsegment2" type="number" step="any" placeholder="Enter midsegment 2"
+                aria-label="triangle midsegment 2" />
+            </label>
+            <label><span class="muted">Midsegment 3 (mid3)</span>
+              <input id="shape2DTriangleMidsegment3" type="number" step="any" placeholder="Enter midsegment 3"
+                aria-label="triangle midsegment 3" />
+            </label>
+            <label><span class="muted">Median 1 (m1)</span>
+              <input id="shape2DTriangleMedian1" type="number" step="any" placeholder="Enter median 1"
+                aria-label="triangle median 1" />
+            </label>
+            <label><span class="muted">Median 2 (m2)</span>
+              <input id="shape2DTriangleMedian2" type="number" step="any" placeholder="Enter median 2"
+                aria-label="triangle median 2" />
+            </label>
+            <label><span class="muted">Median 3 (m3)</span>
+              <input id="shape2DTriangleMedian3" type="number" step="any" placeholder="Enter median 3"
+                aria-label="triangle median 3" />
+            </label>
+            <label><span class="muted">side 1 (a)</span>
+              <input id="shape2DTriangleSide1" type="number" step="any" placeholder="Enter side 1"
+                aria-label="triangle side 1" />
+            </label>
+            <label><span class="muted">side 2 (b)</span>
+              <input id="shape2DTriangleSide2" type="number" step="any" placeholder="Enter side 2"
+                aria-label="triangle side 2" />
+            </label>
+            <label><span class="muted">side 3 (c)</span>
+              <input id="shape2DTriangleSide3" type="number" step="any" placeholder="Enter side 3"
+                aria-label="triangle side 3" />
+            </label>
+            <label><span class="muted">Angle A (opposite of side a)</span>
+              <input id="shape2DTriangleAngle1" type="number" step="any" placeholder="Enter angle A"
+                aria-label="triangle angle A" />
+            </label>
+            <label><span class="muted">Angle B (opposite of side b)</span>
+              <input id="shape2DTriangleAngle2" type="number" step="any" placeholder="Enter angle B"
+                aria-label="triangle angle B" />
+            </label>
+            <label><span class="muted">Angle C (opposite of side c)</span>
+              <input id="shape2DTriangleAngle3" type="number" step="any" placeholder="Enter angle C"
+                aria-label="triangle angle C" />
+            </label>
+            <label><span class="muted">Semiperimeter (S)</span>
+              <input id="shape2DTriangleSemiperimeter" type="number" step="any" placeholder="Enter semiperimeter"
+                aria-label="triangle semiperimeter" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DTrianglePerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="triangle perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DTriangleArea" type="number" step="any" placeholder="Enter area"
+                aria-label="triangle area" />
+            </label>
+            <label><span class="muted">Inradius (r)</span>
+              <input id="shape2DTriangleInradius" type="number" step="any" placeholder="Enter inradius"
+                aria-label="triangle inradius" />
+            </label>
+            <label><span class="muted">Circumradius (R)</span>
+              <input id="shape2DTriangleCircumradius" type="number" step="any" placeholder="Enter circumradius"
+                aria-label="triangle circumradius" />
+            </label>
+            <label><span class="muted">Exradius 1 (r)</span>
+              <input id="shape2DTriangleExradius1" type="number" step="any" placeholder="Enter exradius 1"
+                aria-label="triangle exradius 1" />
+            </label>
+            <label><span class="muted">Exradius 2 (r)</span>
+              <input id="shape2DTriangleExradius2" type="number" step="any" placeholder="Enter exradius 2"
+                aria-label="triangle exradius 2" />
+            </label>
+            <label><span class="muted">Exradius 3 (r)</span>
+              <input id="shape2DTriangleExradius3" type="number" step="any" placeholder="Enter exradius 3"
+                aria-label="triangle exradius 3" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DSquareGrid">
+          <div class="row">
+            <p class="muted">Square Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Side Length (s)</span>
+              <input id="shape2DSquareSide" type="number" step="any" placeholder="Enter side length"
+                aria-label="square side length" />
+            </label>
+            <label><span class="muted">Height (h)</span>
+              <input id="shape2DSquareHeight" type="number" step="any" placeholder="Enter height"
+                aria-label="square height" />
+            </label>
+            <label><span class="muted">Diagonal (d)</span>
+              <input id="shape2DSquareDiagonal" type="number" step="any" placeholder="Enter diagonal"
+                aria-label="square diagonal" />
+            </label>
+            <label><span class="muted">Midline (line connecting adjacent sides)</span>
+              <input id="shape2DSquareMidline" type="number" step="any" placeholder="Enter midline"
+                aria-label="square midline" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DSquarePerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="square perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DSquareArea" type="number" step="any" placeholder="Enter area"
+                aria-label="square area" />
+            </label>
+            <label><span class="muted">Inradius (r)</span>
+              <input id="shape2DSquareInradius" type="number" step="any" placeholder="Enter inradius"
+                aria-label="square inradius" />
+            </label>
+            <label><span class="muted">Circumradius (R)</span>
+              <input id="shape2DSquareCircumradius" type="number" step="any" placeholder="Enter circumradius"
+                aria-label="square circumradius" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DRectangleGrid">
+          <div class="row">
+            <p class="muted">Rectangle Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Length (l)</span>
+              <input id="shape2DRectangleLength" type="number" step="any" placeholder="Enter length"
+                aria-label="rectangle length" />
+            </label>
+            <label><span class="muted">Width (w)</span>
+              <input id="shape2DRectangleWidth" type="number" step="any" placeholder="Enter width"
+                aria-label="rectangle width" />
+            </label>
+            <label><span class="muted">Diagonal (d)</span>
+              <input id="shape2DRectangleDiagonal" type="number" step="any" placeholder="Enter diagonal"
+                aria-label="rectangle diagonal" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DRectanglePerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="rectangle perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DRectangleArea" type="number" step="any" placeholder="Enter area"
+                aria-label="rectangle area" />
+            </label>
+            <label><span class="muted">Inradius (r)</span>
+              <input id="shape2DRectangleInradius" type="number" step="any" placeholder="Enter inradius"
+                aria-label="rectangle inradius" />
+            </label>
+            <label><span class="muted">Circumradius (R)</span>
+              <input id="shape2DRectangleCircumradius" type="number" step="any" placeholder="Enter circumradius"
+                aria-label="rectangle circumradius" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DParallelograngrid">
+          <div class="row">
+            <p class="muted">Parallelogram Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Base (b)</span>
+              <input id="shape2DParallelogramBase" type="number" step="any" placeholder="Enter base"
+                aria-label="parallelogram base" />
+            </label>
+            <label><span class="muted">Height (h)</span>
+              <input id="shape2DParallelogramHeight" type="number" step="any" placeholder="Enter height"
+                aria-label="parallelogram height" />
+            </label>
+            <label><span class="muted">Side Length (s)</span>
+              <input id="shape2DParallelogramSide" type="number" step="any" placeholder="Enter side length"
+                aria-label="parallelogram side length" />
+            </label>
+            <label><span class="muted">Angle A (left of base)</span>
+              <input id="shape2DParallelogramAngleA" type="number" step="any" placeholder="Enter angle A"
+                aria-label="parallelogram angle A" />
+            </label>
+            <label><span class="muted">Angle B (right of base)</span>
+              <input id="shape2DParallelogramAngleB" type="number" step="any" placeholder="Enter angle B"
+                aria-label="parallelogram angle B" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DParallelogramPerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="parallelogram perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DParallelogramArea" type="number" step="any" placeholder="Enter area"
+                aria-label="parallelogram area" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DTrapezoidGrid">
+          <div class="row">
+            <p class="muted">Trapezoid Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Base 1 (b₁)</span>
+              <input id="shape2DTrapezoidBase1" type="number" step="any" placeholder="Enter base 1"
+                aria-label="trapezoid base 1" />
+            </label>
+            <label><span class="muted">Base 2 (b₂)</span>
+              <input id="shape2DTrapezoidBase2" type="number" step="any" placeholder="Enter base 2"
+                aria-label="trapezoid base 2" />
+            </label>
+            <label><span class="muted">Height (h)</span>
+              <input id="shape2DTrapezoidHeight" type="number" step="any" placeholder="Enter height"
+                aria-label="trapezoid height" />
+            </label>
+            <label><span class="muted">Side 1 (s₁)</span>
+              <input id="shape2DTrapezoidSide1" type="number" step="any" placeholder="Enter side 1"
+                aria-label="trapezoid side 1" />
+            </label>
+            <label><span class="muted">Side 2 (s₂)</span>
+              <input id="shape2DTrapezoidSide2" type="number" step="any" placeholder="Enter side 2"
+                aria-label="trapezoid side 2" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DTrapezoidPerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="trapezoid perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DTrapezoidArea" type="number" step="any" placeholder="Enter area"
+                aria-label="trapezoid area" />
+            </label>
+            <label><span class="muted">Midsegment (m)</span>
+              <input id="shape2DTrapezoidMidsegment" type="number" step="any" placeholder="Enter midsegment"
+                aria-label="trapezoid midsegment" />
+            </label>
+            <label><span class="muted">Angle A (left of base 1)</span>
+              <input id="shape2DTrapezoidAngleA" type="number" step="any" placeholder="Enter angle A"
+                aria-label="trapezoid angle A" />
+            </label>
+            <label><span class="muted">Angle B (right of base 1)</span>
+              <input id="shape2DTrapezoidAngleB" type="number" step="any" placeholder="Enter angle B"
+                aria-label="trapezoid angle B" />
+            </label>
+            <label><span class="muted">Angle C (left of base 2)</span>
+              <input id="shape2DTrapezoidAngleC" type="number" step="any" placeholder="Enter angle C"
+                aria-label="trapezoid angle C" />
+            </label>
+            <label><span class="muted">Angle D (right of base 2)</span>
+              <input id="shape2DTrapezoidAngleD" type="number" step="any" placeholder="Enter angle D"
+                aria-label="trapezoid angle D" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DKiteGrid">
+          <div class="row">
+            <p class="muted">Kite Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Diagonal 1 (d₁)</span>
+              <input id="shape2DKiteDiagonal1" type="number" step="any" placeholder="Enter diagonal 1"
+                aria-label="kite diagonal 1" />
+            </label>
+            <label><span class="muted">Diagonal 2 (d₂)</span>
+              <input id="shape2DKiteDiagonal2" type="number" step="any" placeholder="Enter diagonal 2"
+                aria-label="kite diagonal 2" />
+            </label>
+            <label><span class="muted">Short Side (s₁)</span>
+              <input id="shape2DKiteSide1" type="number" step="any" placeholder="Enter side 1"
+                aria-label="kite side 1" />
+            </label>
+            <label><span class="muted">Long Side (s₂)</span>
+              <input id="shape2DKiteSide2" type="number" step="any" placeholder="Enter side 2"
+                aria-label="kite side 2" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DKitePerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="kite perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DKiteArea" type="number" step="any" placeholder="Enter area" aria-label="kite area" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DEllipseGrid">
+          <div class="row">
+            <p class="muted">Ellipse Parameters. Enter known values or leave blank if unknown.</p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Semi-major Axis (a)</span>
+              <input id="shape2DEllipseSemiMajor" type="number" step="any" placeholder="Enter semi-major axis"
+                aria-label="ellipse semi-major axis" />
+            </label>
+            <label><span class="muted">Semi-minor Axis (b)</span>
+              <input id="shape2DEllipseSemiMinor" type="number" step="any" placeholder="Enter semi-minor axis"
+                aria-label="ellipse semi-minor axis" />
+            </label>
+            <label><span class="muted">Focal Distance (c)</span>
+              <input id="shape2DEllipseFocalDistance" type="number" step="any" placeholder="Enter focal distance"
+                aria-label="ellipse focal distance" />
+            </label>
+            <label><span class="muted">Perimeter (P)</span>
+              <input id="shape2DEllipsePerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="ellipse perimeter" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DEllipseArea" type="number" step="any" placeholder="Enter area"
+                aria-label="ellipse area" />
+            </label>
+          </div>
+        </div>
+        <div class="shapes-2d shapes-2d-hidden" id="shapes2DRegularPolygonGrid">
+          <div class="row">
+            <p class="muted">Regular Polygon Parameters. Enter known values or leave blank if unknown.
+            </p>
+          </div>
+          <div class="grid">
+            <label><span class="muted">Number of Sides (n)</span>
+              <input id="shape2DRegularPolygonSides" type="number" step="any" placeholder="Enter number of sides"
+                aria-label="regular polygon number of sides" />
+            </label>
+            <label><span class="muted">Side Length (s)</span>
+              <input id="shape2DRegularPolygonSideLength" type="number" step="any" placeholder="Enter side length"
+                aria-label="regular polygon side length" />
+            </label>
+            <label><span class="muted">Apothem (ap)</span>
+              <input id="shape2DRegularPolygonApothemLength" type="number" step="any" placeholder="Enter apothem length"
+                aria-label="regular polygon apothem length" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DRegularPolygonArea" type="number" step="any" placeholder="Enter area"
+                aria-label="regular polygon area" />
+            </label>
+            <label><span class="muted">Area (A)</span>
+              <input id="shape2DRegularPolygonPerimeter" type="number" step="any" placeholder="Enter perimeter"
+                aria-label="regular polygon perimeter" />
+            </label>
+            <label><span class="muted">Circumradius (R)</span>
+              <input id="shape2DRegularPolygonCircumradius" type="number" step="any" placeholder="Enter circumradius"
+                aria-label="regular polygon circumradius" />
+            </label>
+            <label><span class="muted">Inradius (r)</span>
+              <input id="shape2DRegularPolygonInradius" type="number" step="any" placeholder="Enter inradius"
+                aria-label="regular polygon inradius" />
+            </label>
+          </div>
+        </div>
+        <div class="output mono" id="shapes2DOut" role="status" aria-live="polite"></div>
+        <div class="row">
+          <button class="btn primary" onclick="shapes2DCompute()">Compute</button>
+          <button class="btn" onclick="shapes2DClear()">Clear</button>
+        </div>
+      </div>
+
+      <!-- 3D Shapes Calculator -->
+      <div class="card" role="region" aria-labelledby="shapesTitle">
+        <h3 id="shapesTitle">3D Shapes Calculator Coming Soon!!</h3>
+        <p class="muted">Calculate surface area, volume, or any value of various 3D shapes.</p>
+        <div class="row">
+          <label><span class="muted">Shape</span>
+            <select id="shape3D" aria-label="3D shape selection" onchange="showShape3DInputs()">
+              <option value="select" disabled selected>Select a shape</option>
+              <option value="sphere">Sphere</option>
+              <option value="cone">Cone</option>
+              <option value="cylinder">Cylinder</option>
+              <option value="cube">Cube</option>
+              <option value="rectangularPrism">Cuboid</option>
+              <option value="triangularPrism">Triangular Prism</option>
+              <option value="squarePyramid">Square Pyramid</option>
+              <option value="triangularPyramid">Triangular Pyramid</option>
+              <option value="otherPrisms">Other Prisms</option>
+              <option value="otherPyramid">Other Pyramids</option>
+            </select>
+          </label>
+        </div>
       </div>
     </section>
 
@@ -293,30 +799,31 @@
       <h2 id="chemTitle" class="title">Chemistry</h2>
       <div class="card">
         <h3>Periodic Table</h3>
-        <p class="muted">View the periodic table with the atomic number, atomic symbol, element name, mass, type of element. Click on an element to see more details.</p>
+        <p class="muted">View the periodic table with the atomic number, atomic symbol, element name, mass, type of
+          element. Click on an element to see more details.</p>
         <div class="periodic-table">
           <!--Shell-->
           <div class="ptColumn">
-            <span class="element-column"> </span>
-            <div class="side-text">
+            <span class="element-column" style="color:transparent">Shell</span>
+            <div class="side-text" style="text-align: right;">
               1
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: right;">
               2
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: right;">
               3
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: right;">
               4
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: right;">
               5
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: right;">
               6
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: right;">
               7
             </div>
             <br>
@@ -1200,7 +1707,7 @@
             <div id="atomLu" data-symbol="Lu" class="element-box lanthanides">
               <div class="element-number">71</div>
               <div class="element-symbol">Lu</div>
-              <div class="element-name">Lanthanum</div>
+              <div class="element-name">Lutenium</div>
               <div class="element-mass">(138.904)</div>
               <div class="element-type-solids">Solid</div>
             </div>
@@ -1269,26 +1776,26 @@
           </div>
           <!--Orbitals-->
           <div class="ptColumn">
-            <span class="element-column"> </span>
-            <div class="side-text">
+            <span class="element-column" style="color:transparent">Orbitals</span>
+            <div class="side-text" style="text-align: left;">
               2
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: left;">
               2<br>8
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: left;">
               2<br>8<br>8
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: left;">
               2<br>8<br>18<br>8
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: left;">
               2<br>8<br>18<br>18<br>8
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: left;">
               2<br>8<br>18<br>32<br>18<br>8
             </div>
-            <div class="side-text">
+            <div class="side-text" style="text-align: left;">
               2<br>8<br>18<br>32<br>32<br>18<br>8
             </div>
             <br>
@@ -1298,49 +1805,191 @@
         </div>
         <br><br>
         <!--Legend-->
-          <div class="legend-row">
-            <button data-target="alkaliMetals" class="element-box-legend alkaliMetalsLegend" onclick="highlightElementGroup('alkaliMetals')">
-              <div class="element-type">Alkali metals</div>
-            </button>
-            <button data-target="alkalineEarthMetals" class="element-box-legend alkalineEarthMetalsLegend" onclick="highlightElementGroup('alkalineEarthMetals')">
-              <div class="element-type">Alkaline earth metals</div>
-            </button>
-            <button data-target="transitionMetals" class="element-box-legend transitionMetalsLegend" onclick="highlightElementGroup('transitionMetals')">
-              <div class="element-type">Transition metals</div>
-            </button>
-            <button data-target="postTransitionMetals" class="element-box-legend postTransitionMetalsLegend" onclick="highlightElementGroup('postTransitionMetals')">
-              <div class="element-type">Post-transition metals</div>
-            </button>
-            <button data-target="metalloids" class="element-box-legend metalloidsLegend" onclick="highlightElementGroup('metalloids')">
-              <div class="element-type">Metalloids</div>
-            </button>
-          </div>
-          <br>
-          <div class="legend-row">
-            <button data-target="reactiveNonMetals" class="element-box-legend reactiveNonMetalsLegend" onclick="highlightElementGroup('reactiveNonMetals')">
-              <div class="element-type">Reactive nonmetals</div>
-            </button>
-            <button data-target="nobleGases" class="element-box-legend nobleGasesLegend" onclick="highlightElementGroup('nobleGases')">
-              <div class="element-type">Noble gases</div>
-            </button>
-            <button data-target="lanthanides" class="element-box-legend lanthanidesLegend" onclick="highlightElementGroup('lanthanides')">
-              <div class="element-type">Lanthanides</div>
-            </button>
-            <button data-target="actinides" class="element-box-legend actinidesLegend" onclick="highlightElementGroup('actinides')">
-              <div class="element-type">Actinides</div>
-            </button>
-            <button data-target="unknownElements" class="element-box-legend unknownElementsLegend" onclick="highlightElementGroup('unknownElements')">
-              <div class="element-type">Unknown properties</div>
-            </button>
-          </div>
+        <div class="legend-row">
+          <button data-target="alkaliMetals" class="element-box-legend alkaliMetalsLegend"
+            onclick="highlightElementGroup('alkaliMetals')">
+            <div class="element-type">Alkali metals</div>
+          </button>
+          <button data-target="alkalineEarthMetals" class="element-box-legend alkalineEarthMetalsLegend"
+            onclick="highlightElementGroup('alkalineEarthMetals')">
+            <div class="element-type">Alkaline earth metals</div>
+          </button>
+          <button data-target="transitionMetals" class="element-box-legend transitionMetalsLegend"
+            onclick="highlightElementGroup('transitionMetals')">
+            <div class="element-type">Transition metals</div>
+          </button>
+          <button data-target="postTransitionMetals" class="element-box-legend postTransitionMetalsLegend"
+            onclick="highlightElementGroup('postTransitionMetals')">
+            <div class="element-type">Post-transition metals</div>
+          </button>
+          <button data-target="metalloids" class="element-box-legend metalloidsLegend"
+            onclick="highlightElementGroup('metalloids')">
+            <div class="element-type">Metalloids</div>
+          </button>
+        </div>
+        <br>
+        <div class="legend-row">
+          <button data-target="reactiveNonMetals" class="element-box-legend reactiveNonMetalsLegend"
+            onclick="highlightElementGroup('reactiveNonMetals')">
+            <div class="element-type">Reactive nonmetals</div>
+          </button>
+          <button data-target="nobleGases" class="element-box-legend nobleGasesLegend"
+            onclick="highlightElementGroup('nobleGases')">
+            <div class="element-type">Noble gases</div>
+          </button>
+          <button data-target="lanthanides" class="element-box-legend lanthanidesLegend"
+            onclick="highlightElementGroup('lanthanides')">
+            <div class="element-type">Lanthanides</div>
+          </button>
+          <button data-target="actinides" class="element-box-legend actinidesLegend"
+            onclick="highlightElementGroup('actinides')">
+            <div class="element-type">Actinides</div>
+          </button>
+          <button data-target="unknownElements" class="element-box-legend unknownElementsLegend"
+            onclick="highlightElementGroup('unknownElements')">
+            <div class="element-type">Unknown properties</div>
+          </button>
+        </div><br>
+        <label><span class="muted">Need help finding the element? Type in the Element name, number or symbol</span>
+          <input id="ptSearch" type="text" step="any" />
+        </label>
+        <br>
+        <button class="btn" onclick="searchElement()">Search</button>
         <div id="ptOut" class="output mono" role="status" aria-live="polite">
+          <div id="ptOutElementInfo" class="element-info-out">
+            <div id="elementInfoOutMain" class="element-info-out-main">
+              <div id="element-info-out-number" style="font-size: 25px; text-align: left; font-weight: 500;"></div>
+              <div id="element-info-out-symbol" style="font-size: 4vw; font-weight: 700;"></div>
+              <div id="element-info-out-name" style="font-size: 25px; font-weight: 500;"></div>
+            </div>
+            <div id="elementInfoOutGeneral" class="grid element-info-out-display element-info-out-content">
+              <div id="element-info-out-classification"></div>
+              <div id="element-info-out-standard-state"></div>
+              <div id="element-info-out-period"></div>
+              <div id="element-info-out-group"></div>
+              <div id="element-info-out-block"></div>
+              <div id="element-info-out-atomic-mass"></div>
+              <div id="element-info-out-protons"></div>
+              <div id="element-info-out-neutrons"></div>
+              <div id="element-info-out-electrons-neutral"></div>
+            </div>
+            <div id="elementInfoOutHistory" class="grid element-info-out-display element-info-out-content">
+              <div id="element-info-out-discoverer"></div>
+              <div id="element-info-out-date"></div>
+              <div id="element-info-out-origin"></div>
+            </div>
+            <div id="elementInfoOutAbundance" class="grid element-info-out-display element-info-out-content">
+              <div id="element-info-out-abundance-earth"></div>
+              <div id="element-info-out-abundance-other"></div>
+              <div id="element-info-out-sources"></div>
+            </div>
+            <div id="elementInfoOutElectron" class="grid element-info-out-display element-info-out-content">
+              <div id="element-info-out-electron-configuration"></div>
+              <div id="element-info-out-condensed-electron-configuration"></div>
+              <div id="element-info-out-common-oxidation-states"></div>
+              <div id="element-info-out-electron-count-in-ion"></div>
+              <div id="element-info-out-valence-orbital-diagram"></div>
+              <div id="element-info-out-dot-structure"></div>
+              <div id="element-info-out-nuclear-spin"></div>
+              <div id="element-info-out-magnetic-moment"></div>
+            </div>
+            <div id="elementInfoOutPhysical" class="grid element-info-out-display element-info-out-content">
+              <div id="element-info-out-melting-point-c"></div>
+              <div id="element-info-out-melting-point-k"></div>
+              <div id="element-info-out-melting-point-pressure-dependency"></div>
+              <div id="element-info-out-boiling-point-c"></div>
+              <div id="element-info-out-boiling-point-k"></div>
+              <div id="element-info-out-boiling-point-pressure-dependency"></div>
+              <div id="element-info-out-density"></div>
+              <div id="element-info-out-atomic-radius"></div>
+              <div id="element-info-out-covalent-radius"></div>
+              <div id="element-info-out-van-der-waals-radius"></div>
+              <div id="element-info-out-ionic-radius"></div>
+              <div id="element-info-out-mohs-hardness"></div>
+              <div id="element-info-out-youngs-modulus"></div>
+              <div id="element-info-out-bulk-modulus"></div>
+              <div id="element-info-out-shear-modulus"></div>
+              <div id="element-info-out-thermal-conductivity"></div>
+              <div id="element-info-out-specific-heat"></div>
+              <div id="element-info-out-heat-of-fusion"></div>
+              <div id="element-info-out-heat-of-vaporization"></div>
+              <div id="element-info-out-color-solid"></div>
+              <div id="element-info-out-refractive-index"></div>
+              <div id="element-info-out-crystal-structure"></div>
+              <div id="element-info-out-lattice-parameters"></div>
+              <div id="element-info-out-space-group"></div>
+              <div id="element-info-out-molar-volume"></div>
+              <div id="element-info-out-solubility"></div>
+              <div id="element-info-out-vapor-point"></div>
+            </div>
+            <div id="elementInfoOutChemical" class="grid element-info-out-display element-info-out-content">
+              <div id="element-info-out-electronegativity"></div>
+              <div id="element-info-out-electron-affinity"></div>
+              <div id="element-info-out-ionization-energy"></div>
+              <div id="element-info-out-electrode-potential"></div>
+              <div id="element-info-out-acid-base-behavior"></div>
+              <div id="element-info-out-reactivity"></div>
+              <div id="element-info-out-electrical-conductivity"></div>
+              <div id="element-info-out-magnetic-properties"></div>
+              <div id="element-info-out-band-gap"></div>
+              <div id="element-info-out-radioactivity"></div>
+              <div id="element-info-out-half-life"></div>
+              <div id="element-info-out-toxicity"></div>
+              <div id="element-info-out-bio-role"></div>
+            </div>
+            <div id="elementInfoOutIsotopes" class="grid element-info-out-display element-info-out-content">
+              <div id="isotopeContainer">
+                <h3>Isotopes</h3>
+                <div class="slider-container">
+                  <button id="isotopeLeft" class="nav-btn">&#10094;</button>
+                  <div id="isotopeSlider" class="slider"></div>
+                  <button id="isotopeRight" class="nav-btn">&#10095;</button>
+                </div>
+              </div>
+              <div id="isotope-name"></div>
+              <div id="isotope-symbol"></div>
+              <div id="isotope-neutrons"></div>
+              <div id="isotope-mass"></div>
+              <div id="isotope-mass-excess"></div>
+              <div id="element-info-out-natural"></div>
+              <div id="element-info-out-solar"></div>
+              <div id="element-info-out-universe"></div>
+              <div id="isotope-binding-energy"></div>
+              <div id="isotope-decay-energy"></div>
+              <div id="isotope-decay-mode"></div>
+              <div id="isotope-decay-width"></div>
+              <div id="isotope-half-life"></div>
+              <div id="isotope-mag-moment"></div>
+              <div id="isotope-quadrupole"></div>
+              <div id="isotope-specific-activity"></div>
+              <div id="isotope-spin"></div>
+              <div id="isotope-notes"></div>
+              <div id="isotope-use"></div>
+            </div>
+            <div class="element-info-out-list">
+              <button id="element-info-out-general" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutGeneral" onclick="showElementInfoOut(this)">General</button>
+              <button id="element-info-out-history" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutHistory" onclick="showElementInfoOut(this)">History</button>
+              <button id="element-info-out-abundance" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutAbundance" onclick="showElementInfoOut(this)">Abundance</button>
+              <button id="element-info-out-physical" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutPhysical" onclick="showElementInfoOut(this)">Physical Properties</button>
+              <button id="element-info-out-chemical" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutChemical" onclick="showElementInfoOut(this)">Chemical Properties</button>
+              <button id="element-info-out-electron" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutElectron" onclick="showElementInfoOut(this)">Electron Properties</button>
+              <button id="element-info-out-isotopes" class="element-info-out-trigger btn"
+                data-target-id="elementInfoOutIsotopes" onclick="showElementInfoOut(this)">Isotope Info</button>
+            </div>
+          </div>
         </div>
         <button id="ptInfoBtn" class="btn ptInfoBtnHidden" onclick="ptInfoClear()">Clear</button>
       </div>
-      <div class="card">
+      <!-- <div class="card">
         <h3>Formula mass & quick helpers</h3>
         <p class="muted">Currently in progress — coming soon.</p>
-      </div>
+      </div> -->
     </section>
 
     <!-- GAMES -->
@@ -1374,9 +2023,9 @@
           </label>
           <label id="piRevealHolder" class="piHidden">
             <span class="muted">These are the first 300 digits of pi.</span>
-            <div class="output mono">
-              3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679<br>
-              8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196<br>
+            <div class="output mono" style="word-break: normal;">
+              3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
+              8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
               4428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141
             </div>
           </label>
@@ -1386,6 +2035,868 @@
           <button id="piReset" class="btn pi-reset-hidden" onclick="piReset()">Reset</button>
         </div>
         <div id="piComment" class="output mono pi-comment-hidden" role="status" aria-live="polite"></div>
+      </div>
+
+      <!-- Sudoku
+      <div class="card" role="region" aria-labelledby="sudokuTitle">
+        <h3 id="sudokuTitle">Sudoku</h3>
+      </div> -->
+      <!-- Test Maker Taker -->
+      <div class="card" id="tMTcard" role="region" aria-labelledby="testMakerTakerTitle">
+        <div id="tMT">
+          <h3 id="testMakerTakerTitle">Test Maker Taker</h3>
+          <p class="muted">
+            Want to create a test for your students or for yourself? Or need to take a test made by someone? Select the
+            mode and continue.
+          </p><br>
+          <label><span class="muted">Mode</span>
+            <select id="tMTMoT" onchange="tMTms()">
+              <option value="tMTs">Select</option>
+              <option value="tMTM">Make a test</option>
+              <option value="tMTT">Take a test</option>
+            </select>
+          </label>
+        </div>
+        <div id="tMTTM" style="display:flex; flex-direction:column">
+          <div class="row">
+            <label><span class="muted">Enter the total number of available questions</span>
+              <input id="tMTaq" type="number" value="10" />
+            </label>
+            <label><span class="muted">Enter the number of given questions</span>
+              <input id="tMTvq" type="number" value="5" />
+            </label>
+            <label><span class="muted" style="color:none;"></span><br>
+              <button onclick="tMTTMC()" class="btn">Create</button>
+            </label>
+            <label><span class="muted" style="color:none;"></span><br>
+              <button onclick="tMTB()" class="btn">Back</button>
+            </label>
+          </div>
+          <div id="tMTTMout" class="output mono"></div>
+        </div>
+        <div id="tMTTT" style="display:flex; flex-direction:column">
+          <div class="row">
+            <label id="tMTTTidh"><span class="muted">Enter your test id</span>
+              <input id="tMTTTid" type="text" placeholder="ab12" />
+            </label>
+            <label><span class="muted" style="color:none;"></span><br>
+              <button class="btn" onclick="tMTTTS()">Start</button>
+            </label>
+            <label><span class="muted" style="color:none;"></span><br>
+              <button onclick="tMTB()" class="btn">Back</button>
+            </label>
+          </div>
+          <div id="tMTTTout" class="output mono"></div>
+        </div>
+      </div>
+
+      <!-- Neutropolis -->
+      <div id="neutropolisGame" class="card">
+        <h3 aria-labelledby="Neutropolis-title">Neutropolis</h3>
+        <div id="ngmi">
+          <p class="muted">
+            Want to play Neutropolis with your friends online or in person? Select the mode.
+          </p><br>
+          <label><span class="muted">Mode</span>
+            <select id="mngr" aria-label="gameroom mode" onchange="changengr()">
+              <option value="selectngr">Select Mode</option>
+              <option value="jngr">Join a Room</option>
+              <option value="cngr">Create a Room</option>
+            </select>
+          </label>
+        </div>
+        <div id="jngr">
+          <label><span class="muted">Enter Room Code</span>
+            <input type="text" id="ngrJoinCode" placeholder="Room Code" />
+          </label>
+          <div id="jngrOut" class="output mono"></div>
+          <div class="row">
+            <button class="btn" id="jjngr" onclick="joinngr()">Join Room</button>
+            <button class="btn" id="bjngr" onclick="backngr()">Back</button>
+          </div>
+          <div id="pngr">
+            <p class="muted">Public Rooms</p>
+            <div id="ngrprl" class="ngrprl">
+            </div>
+          </div>
+        </div>
+        <div id="cngr" class="">
+          <div id="ngrcr" class="ngr-panel">
+            <p class="muted">Choose your settings for the room</p>
+            <div class="ngr-panel-settings">
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Make Room Publicly Available</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrRoomPublic" hidden>
+                  <label for="ngrRoomPublic" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Max number of Players</span>
+                </label>
+                <select id="ngrMaxPlayers" style="width:71px;">
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
+              <!-- <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Allow Bots</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowBots" hidden>
+                  <label for="ngrAllowBots" class="slider-switch"></label>
+                </div>
+              </div> -->
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Allow Mortgage</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowMortgage" hidden>
+                  <label for="ngrAllowMortgage" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Allow Players to recieve rent when in prison</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowPrisonRent" hidden>
+                  <label for="ngrAllowPrisonRent" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Allow Auctions</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowAuction" hidden>
+                  <label for="ngrAllowAuction" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Allow Vacation Cash</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowVacationCash" hidden>
+                  <label for="ngrAllowVacationCash" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Double Rent if player has a complete set of the property</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowDoubleRentSet" hidden>
+                  <label for="ngrAllowDoubleRentSet" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Players must evenly build houses along their property</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowEvenBuild" hidden>
+                  <label for="ngrAllowEvenBuild" class="slider-switch"></label>
+                </div>
+              </div>
+              <div class="row" style="justify-content: space-between;">
+                <label><span class="muted">Randomize Player Order</span>
+                </label>
+                <div class="toggle-switch-container">
+                  <input type="checkbox" id="ngrAllowRandomPlayerOrder" hidden>
+                  <label for="ngrAllowRandomPlayerOrder" class="slider-switch"></label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <button class="btn" id="cpvrngr" onclick="crngr()">Create Room</button>
+              <button class="btn" id="bngrv" onclick="backngr()">Back</button>
+            </div>
+          </div>
+        </div>
+        <div id="ngrc" class="">
+          <div id="ngrcpl" class="ngrcp">
+            <div id="ngrcc" class="ngrcb">
+              <div class="ngrcbn l">Game Chat</div>
+              <div id="ngrccm">
+              </div>
+              <div class="ngrcci">
+                <input type="text" id="ngrccit" placeholder="Type a message..." />
+                <button class="btn" id="ngrccis">></button>
+              </div>
+              <!-- <button id="ngrccme">–––––</button> -->
+            </div>
+            <div id="ngrcpl" class="ngrcb">
+              <div class="ngrcbn l">Players</div>
+              <div id="ngrcplc"></div>
+              <!-- <button id="ngrcplme">–––––</button> -->
+            </div>
+            <div id="ngrcpp" class="ngrcb">
+              <div id="ngrcppn" class="ngrcbn">Profile</div>
+              <div id="ngrcppa"></div>
+              <div>
+                <div class="muted">Properties</div>
+                <div id="ngrcppp"></div>
+              </div>
+              <!-- <button id="ngrcppme">–––––</button> -->
+            </div>
+          </div>
+          <div id="ngb">
+            <div id="ngbst">
+              <div class="ngbphc">WhiteHole<br>––––><br>
+                <div id="ngbpp0"></div>
+              </div>
+            </div>
+            <div id="ngbp1" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbp1p" class="ngbppv">₦60</div>
+                <div id="ngbpp1"></div>
+                <div id="ngbp1n">Vesta</div>
+                <div class="ngbps1">
+                  <div id="ngbp1h" class="ngbph">
+                    <div id="ngbp1h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp1h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp1h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp1h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp1h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ngbwc1" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbpp2"></div>
+                <div id="ngbwc1i"><img src="ngbwc.png"></div>
+                <div id="ngbwc1n">Space Loot</div>
+              </div>
+            </div>
+            <div id="ngbp2" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbp2p" class="ngbppv">₦60</div>
+                <div id="ngbpp3"></div>
+                <div id="ngbp2n">Pallas</div>
+                <div class="ngbps1">
+                  <div id="ngbp2h" class="ngbph">
+                    <div id="ngbp2h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp2h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp2h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp2h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp2h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ngbit" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbitv">10%</div>
+                <div id="ngbpp4"></div>
+                <div id="ngbitn">Cosmo Tax</div>
+              </div>
+            </div>
+            <div id="ngba1" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngba1p" class="ngbppv">₦200</div>
+                <div id="ngbpp5"></div>
+                <div id="ngba1i"><img class="ngbapng ngbapngt" src="ngba.png"></div>
+                <div id="ngba1n">NASA</div>
+              </div>
+            </div>
+            <div id="ngbp3" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbp3p" class="ngbppv">₦100</div>
+                <div id="ngbpp6"></div>
+                <div id="ngbp3n">Ceres</div>
+                <div class="ngbps2">
+                  <div id="ngbp3h" class="ngbph">
+                    <div id="ngbp3h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp3h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp3h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp3h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp3h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ngbrc1" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbpp7"></div>
+                <div id="ngbrc1i"><img src="ngbrc.png"></div>
+                <div id="ngbrc1n">Rift</div>
+              </div>
+            </div>
+            <div id="ngbp4" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbp4p" class="ngbppv">₦100</div>
+                <div id="ngbpp8"></div>
+                <div id="ngbp4n">Haumea</div>
+                <div class="ngbps2">
+                  <div id="ngbp4h" class="ngbph">
+                    <div id="ngbp4h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp4h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp4h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp4h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp4h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ngbp5" class="ngbtp">
+              <div class="ngbpht">
+                <div id="ngbp5p" class="ngbppv">₦120</div>
+                <div id="ngbpp9"></div>
+                <div id="ngbp5n">Eris</div>
+                <div class="ngbps2">
+                  <div id="ngbp5h" class="ngbph">
+                    <div id="ngbp5h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp5h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp5h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp5h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp5h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ngbvj">
+              <div class="ngbphc">
+                <div id="ngbj">
+                  <div id="ngbpp41"></div>
+                </div>
+                <div id="ngbvjv">Event</div>
+                <div id="ngbpp10"></div>
+                <div id="ngbvjj">Horizon</div>
+              </div>
+            </div>
+            <div id="ngbp6" class="ngbrp">
+              <div class="ngbphr">
+                <div class="ngbps3">
+                  <div id="ngbp6h" class="ngbph">
+                    <div id="ngbp6h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp6h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp6h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp6h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp6h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp6n">Europa</div>
+                <div id="ngbpp11"></div>
+                <div id="ngbp6p" class="ngbppv">₦120</div>
+              </div>
+            </div>
+            <div id="ngbsg" class="ngbrp">
+              <div class="ngbphr">
+                <div id="ngbsgn">SpaceX Grid</div>
+                <div id="ngbsgi"><img class="ngbspss" src="ngbsg.png"></div>
+                <div id="ngbpp12"></div>
+                <div id="ngbv">₦150</div>
+              </div>
+            </div>
+            <div id="ngbp7" class="ngbrp">
+              <div class="ngbphr">
+                <div class="ngbps3">
+                  <div id="ngbp7h" class="ngbph">
+                    <div id="ngbp7h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp7h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp7h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp7h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp7h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp7n">Enceladus</div>
+                <div id="ngbpp13"></div>
+                <div id="ngbp7p" class="ngbppv">₦140</div>
+              </div>
+            </div>
+            <div id="ngbp8" class="ngbrp">
+              <div class="ngbphr">
+                <div class="ngbps3">
+                  <div id="ngbp8h" class="ngbph">
+                    <div id="ngbp8h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp8h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp8h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp8h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp8h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp8n">Titan</div>
+                <div id="ngbpp14"></div>
+                <div id="ngbp8p" class="ngbppv">₦140</div>
+              </div>
+            </div>
+            <div id="ngba2" class="ngbrp">
+              <div class="ngbphr">
+                <div id="ngba2n">JAXA</div>
+                <div id="ngba2i"><img class="ngbapng ngbapngr" src="ngba.png"></div>
+                <div id="ngbpp15"></div>
+                <div id="ngba2p" class="ngbppv">₦200</div>
+              </div>
+            </div>
+            <div id="ngbp9" class="ngbrp">
+              <div class="ngbphr">
+                <div class="ngbps4">
+                  <div id="ngbp9h" class="ngbph">
+                    <div id="ngbp9h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp9h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp9h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp9h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp9h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp9n">Halley</div>
+                <div id="ngbpp16"></div>
+                <div id="ngbp9p" class="ngbppv">₦160</div>
+              </div>
+            </div>
+            <div id="ngbwc2" class="ngbrp">
+              <div class="ngbphr">
+                <div id="ngbwc2n">Space Loot</div>
+                <div id="ngbwc2i"><img src="ngbwc.png"></div>
+                <div id="ngbpp17"></div>
+              </div>
+            </div>
+            <div id="ngbp10" class="ngbrp">
+              <div class="ngbphr">
+                <div class="ngbps4">
+                  <div id="ngbp10h" class="ngbph">
+                    <div id="ngbp10h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp10h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp10h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp10h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp10h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp10n">Swift</div>
+                <div id="ngbpp18"></div>
+                <div id="ngbp10p" class="ngbppv">₦160</div>
+              </div>
+            </div>
+            <div id="ngbp11" class="ngbrp">
+              <div class="ngbphr">
+                <div class="ngbps4">
+                  <div id="ngbp11h" class="ngbph">
+                    <div id="ngbp11h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp11h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp11h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp11h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp11h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp11n">Encke</div>
+                <div id="ngbpp19"></div>
+                <div id="ngbp11p" class="ngbppv">₦180</div>
+              </div>
+            </div>
+            <div id="ngbwh">
+              <div class="ngbphc">
+                <div id="ngbwhn">Neutron</div>
+                <div id="ngbwhi"><img src="ngbwh.png"></div>
+                <div id="ngbpp20"></div>
+              </div>
+            </div>
+            <div id="ngbp12" class="ngbbp">
+              <div class="ngbphb">
+                <div class="ngbps5">
+                  <div id="ngbp12h" class="ngbph">
+                    <div id="ngbp12h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp12h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp12h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp12h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp12h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp12n">Mercury</div>
+                <div id="ngbpp21"></div>
+                <div id="ngbp12p" class="ngbppv">₦180</div>
+              </div>
+            </div>
+            <div id="ngbrc2" class="ngbbp">
+              <div class="ngbphb">
+                <div id="ngbrc2n">Rift</div>
+                <div id="ngbrc2i"><img src="ngbrc.png"></div>
+                <div id="ngbrc2n"></div>
+                <div id="ngbpp22"></div>
+              </div>
+            </div>
+            <div id="ngbp13" class="ngbbp">
+              <div class="ngbphb">
+                <div class="ngbps5">
+                  <div id="ngbp13h" class="ngbph">
+                    <div id="ngbp13h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp13h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp13h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp13h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp13h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp13n">Venus</div>
+                <div id="ngbpp23"></div>
+                <div id="ngbp13p" class="ngbppv">₦200</div>
+              </div>
+            </div>
+            <div id="ngbp14" class="ngbbp">
+              <div class="ngbphb">
+                <div class="ngbps5">
+                  <div id="ngbp14h" class="ngbph">
+                    <div id="ngbp14h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp14h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp14h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp14h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp14h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp14n">Earth</div>
+                <div id="ngbpp24"></div>
+                <div id="ngbp14p" class="ngbppv">₦200</div>
+              </div>
+            </div>
+            <div id="ngba3" class="ngbbp">
+              <div class="ngbphb">
+                <div id="ngba3n">ESA</div>
+                <div id="ngba3i"><img class="ngbapng" src="ngba.png"></div>
+                <div id="ngba3p" class="ngbppv">₦200</div>
+                <div id="ngbpp25"></div>
+              </div>
+            </div>
+            <div id="ngbp15" class="ngbbp">
+              <div class="ngbphb">
+                <div class="ngbps6">
+                  <div id="ngbp15h" class="ngbph">
+                    <div id="ngbp15h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp15h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp15h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp15h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp15h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp15n">Mars</div>
+                <div id="ngbpp26"></div>
+                <div id="ngbp15p" class="ngbppv">₦220</div>
+              </div>
+            </div>
+            <div id="ngbp16" class="ngbbp">
+              <div class="ngbphb">
+                <div class="ngbps6">
+                  <div id="ngbp16h" class="ngbph">
+                    <div id="ngbp16h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp16h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp16h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp16h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp16h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp16n">Jupiter</div>
+                <div id="ngbpp27"></div>
+                <div id="ngbp16p" class="ngbppv">₦220</div>
+              </div>
+            </div>
+            <div id="ngbhc" class="ngbbp">
+              <div class="ngbphb">
+                <div id="ngbhcn">Hydro Core</div>
+                <div id="ngbhci"><img src="ngbhc.png"></div>
+                <div id="ngbhcv">₦150</div>
+                <div id="ngbpp28"></div>
+              </div>
+            </div>
+            <div id="ngbp17" class="ngbbp">
+              <div class="ngbphb">
+                <div class="ngbps6">
+                  <div id="ngbp17h" class="ngbph">
+                    <div id="ngbp17h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp17h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp17h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp17h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp17h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp17n">Saturn</div>
+                <div id="ngbpp29"></div>
+                <div id="ngbp17p" class="ngbppv">₦240</div>
+              </div>
+            </div>
+            <div id="ngbgj">
+              <div class="ngbphc">
+                <div id="ngbgjn">Caught in BlackHole</div>
+                <div id="ngbgji"><img src="mgmgj.png"></div>
+                <div id="ngbpp30"></div>
+              </div>
+            </div>
+            <div id="ngbp18" class="ngblp">
+              <div class="ngbphl">
+                <div class="ngbps7">
+                  <div id="ngbp18h" class="ngbph">
+                    <div id="ngbp18h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp18h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp18h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp18h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp18h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp18n">Uranus</div>
+                <div id="ngbpp31"></div>
+                <div id="ngbp18p" class="ngbppv">₦240</div>
+              </div>
+            </div>
+            <div id="ngbp19" class="ngblp">
+              <div class="ngbphl">
+                <div class="ngbps7">
+                  <div id="ngbp19h" class="ngbph">
+                    <div id="ngbp19h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp19h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp19h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp19h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp19h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp19n">Neptune</div>
+                <div id="ngbpp32"></div>
+                <div id="ngbp19p" class="ngbppv">₦260</div>
+              </div>
+            </div>
+            <div id="ngbwc3" class="ngblp">
+              <div class="ngbphl">
+                <div id="ngbwc3n">Space Loot</div>
+                <div id="ngbwc3i"><img src="ngbwc.png"></div>
+                <div id="ngbpp33"></div>
+              </div>
+            </div>
+            <div id="ngbp20" class="ngblp">
+              <div class="ngbphl">
+                <div class="ngbps7">
+                  <div id="ngbp20h" class="ngbph">
+                    <div id="ngbp20h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp20h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp20h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp20h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp20h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp20n">PlanetX</div>
+                <div id="ngbpp34"></div>
+                <div id="ngbp20p" class="ngbppv">₦260</div>
+              </div>
+            </div>
+            <div id="ngba4" class="ngblp">
+              <div class="ngbphl">
+                <div id="ngba4n">ISRO</div>
+                <div id="ngba4i"><img class="ngbapng ngbapngl" src="ngba.png"></div>
+                <div id="ngbpp35"></div>
+                <div id="ngba4p" class="ngbppv">₦200</div>
+              </div>
+            </div>
+            <div id="ngbrc3" class="ngblp">
+              <div class="ngbphl">
+                <div id="ngbrc3n">Rift</div>
+                <div id="ngbrc3i"><img src="ngbrc.png"></div>
+                <div id="ngbpp36"></div>
+              </div>
+            </div>
+            <div id="ngbp21" class="ngblp">
+              <div class="ngbphl">
+                <div class="ngbps8">
+                  <div id="ngbp21h" class="ngbph">
+                    <div id="ngbp21h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp21h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp21h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp21h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp21h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp21n">Sun</div>
+                <div id="ngbpp37"></div>
+                <div id="ngbp21p" class="ngbppv">₦280</div>
+              </div>
+            </div>
+            <div id="ngbpt" class="ngblp">
+              <div class="ngbphl">
+                <div id="ngbptn">Prisma Tax</div>
+                <div id="ngbpti"><img src="ngbpt.png"></div>
+                <div id="ngbpp38"></div>
+                <div id="ngbptv" class="ngbppv">₦75</div>
+              </div>
+            </div>
+            <div id="ngbp22" class="ngblp">
+              <div class="ngbphl">
+                <div class="ngbps8">
+                  <div id="ngbp22h" class="ngbph">
+                    <div id="ngbp22h1"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp22h2"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp22h3"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp22h4"><img class="ngbspss" src="ngbsp.png"></div>
+                    <div id="ngbp22h5"><img class="ngbspss" src="ngbss.png"></div>
+                  </div>
+                </div>
+                <div id="ngbp22n">Neutrox</div>
+                <div id="ngbpp39"></div>
+                <div id="ngbp22p" class="ngbppv">₦300</div>
+              </div>
+            </div>
+            <div id="ngbwcp">Space Loot</div>
+            <div id="ngbrcp">Rift</div>
+            <div id="ngbd1">
+              <div class="cube">
+                <div class="ngbds1">
+                  <span class="dot c"></span>
+                </div>
+                <div class="ngbds2">
+                  <span class="dot tl"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds3">
+                  <span class="dot tl"></span>
+                  <span class="dot c"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds4">
+                  <span class="dot tl"></span>
+                  <span class="dot tr"></span>
+                  <span class="dot bl"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds5">
+                  <span class="dot tl"></span>
+                  <span class="dot tr"></span>
+                  <span class="dot c"></span>
+                  <span class="dot bl"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds6">
+                  <span class="dot tl"></span>
+                  <span class="dot tr"></span>
+                  <span class="dot ml"></span>
+                  <span class="dot mr"></span>
+                  <span class="dot bl"></span>
+                  <span class="dot br"></span>
+                </div>
+              </div>
+            </div>
+            <div id="ngbd2">
+              <div class="cube">
+                <div class="ngbds1">
+                  <span class="dot c"></span>
+                </div>
+                <div class="ngbds2">
+                  <span class="dot tl"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds3">
+                  <span class="dot tl"></span>
+                  <span class="dot c"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds4">
+                  <span class="dot tl"></span>
+                  <span class="dot tr"></span>
+                  <span class="dot bl"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds5">
+                  <span class="dot tl"></span>
+                  <span class="dot tr"></span>
+                  <span class="dot c"></span>
+                  <span class="dot bl"></span>
+                  <span class="dot br"></span>
+                </div>
+                <div class="ngbds6">
+                  <span class="dot tl"></span>
+                  <span class="dot tr"></span>
+                  <span class="dot ml"></span>
+                  <span class="dot mr"></span>
+                  <span class="dot bl"></span>
+                  <span class="dot br"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ngrcpr" class="ngrcp">
+            <div id="ngrcgl" class="ngrcb">
+              <div class="ngrcbn r">Game Log</div>
+              <div id="ngrcglm"></div>
+            </div>
+            <div id="ngrcpt" class="ngrcb">
+              <div class="ngrcbn r">Trades</div>
+              <div id="ngrcptl"></div>
+              <div id="ngrcptc" class="btn">Create</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Number Guesser -->
+      <div class="card" role="region" aria-labelledby="numberguesserTitle">
+        <h3 id="ngTitle">Number Guessing</h3>
+        <div class="row">
+          <button class="btn primary" onclick="ng_start()">New Game</button>
+          <input id="ng_guess" type="number" placeholder="Your guess" aria-label="guess" />
+          <button class="btn" onclick="ng_try()">Guess</button>
+        </div>
+        <div id="ng_out" class="output mono" role="status" aria-live="polite">Press "New Game" to start (1–100).
+        </div>
+      </div>
+
+      <!-- Snake Game -->
+      <div class="card" role="region" aria-labelledby="snakeTitle">
+        <h3 id="snakeTitle">Snake Game</h3>
+        <div class=" row snake-game-container">
+          <canvas id="snakeCanvas" class="snake-canvas" tabindex="0"></canvas>
+          <div class="snake-controls">
+            <div class="row" style="padding: 5px;">
+              <div id="snakeScore" class="mono">Score: 0</div>
+            </div>
+            <div class="snake-direction-pad">
+              <button id="upSnake" class="btn">↑</button>
+              <button id="leftSnake" class="btn">←</button>
+              <button id="rightSnake" class="btn">→</button>
+              <button id="downSnake" class="btn">↓</button>
+            </div>
+            <div class="row" style="padding: 5px;">
+              <button class="btn primary" id="startSnakeBtn">Start</button>
+              <button class="btn primary" id="pauseSnakeBtn">Pause</button>
+            </div>
+          </div>
+          <div class="game-inputs">
+            <div class="row" style="padding: 5px;">
+              <div id="snakeHighScore" class="mono">High score: 0</div>
+            </div>
+            <div class="leaderboard-container">Leaderboard:
+              <div id="snakeGameLeaderboard"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jet Shooter Game -->
+      <div class="card" role="region" aria-labelledby="jet shooter Title">
+        <h3 id="jetShooterTitle">Jet Shooter Game</h3>
+        <div class=" row jet-shooter-game-container">
+          <canvas id="jetShooterCanvas" class="jet-shooter-canvas" tabindex="0"></canvas>
+          <div class="jet-shooter-controls">
+            <div class="row" style="padding: 3px; justify-content: center;">
+              <div id="jetShooterScore" class="mono">Score: 0</div>
+              <div id="jetShooterShield" class="mono">Shields: 0</div>
+            </div>
+            <div class="row" style="padding: 3px; justify-content: center;">
+              <div id="jetShooterBullets" class="mono">Bullets remaining: 100</div>
+            </div>
+            <div class="jet-shooter-direction-pad">
+              <button id="leftJetShooter" class="btn">&lt;</button>
+              <button id="shootJetShooter" class="btn">∆</button>
+              <button id="rightJetShooter" class="btn">></button>
+            </div>
+            <div class="row" style="padding: 5px;">
+              <button class="btn primary" id="startJetShooterBtn">Start</button>
+              <button class="btn primary" id="pauseJetShooterBtn">Pause</button>
+            </div>
+          </div>
+          <div class="game-inputs">
+            <div class="row" style="padding: 5px;">
+              <div id="jetShooterHighScore" class="mono">High score: 0</div>
+            </div>
+            <div class="leaderboard-container">Leaderboard:
+              <div id="jetShooterGameLeaderboard"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Math Quiz -->
@@ -1400,7 +2911,8 @@
 
         <div class="dropdown" id="operationDropdown">
           <span class="muted">Allowed Operations:</span>
-          <div class="dropdown-button" id="opsToggle" role="button" tabindex="0" aria-expanded="false">Select Operations
+          <div class="dropdown-button" id="opsToggle" role="button" tabindex="0" aria-expanded="false">Select
+            Operations
           </div>
           <div class="dropdown-content" id="opsContent" aria-hidden="true">
             <label><input type="checkbox" value="+" class="operation" checked> Addition (+)</label><br>
@@ -1418,38 +2930,6 @@
         </div>
 
         <div id="fg2_area" class="output mono" role="status" aria-live="polite">Configure and press Start.</div>
-      </div>
-
-      <!-- Number Guesser -->
-      <div class="card" role="region" aria-labelledby="ngTitle">
-        <h3 id="ngTitle">Number Guessing</h3>
-        <div class="row">
-          <button class="btn primary" onclick="ng_start()">New Game</button>
-          <input id="ng_guess" type="number" placeholder="Your guess" aria-label="guess" />
-          <button class="btn" onclick="ng_try()">Guess</button>
-        </div>
-        <div id="ng_out" class="output mono" role="status" aria-live="polite">Press "New Game" to start (1–100).</div>
-      </div>
-
-      <!-- Snake Game -->
-      <div class="card" role="region" aria-labelledby="snakeTitle">
-        <h3 id="snakeTitle">Snake Game</h3>
-        <div class=" row snake-game-container">
-          <canvas id="snakeCanvas" class="snake-canvas" tabindex="0"></canvas>
-          <div class="snake-controls">
-            <div class="row" style="padding: 5px;">
-              <button class="btn primary" id="startSnakeBtn" onclick="startSnakeGame()">Start Game</button>
-              <button class="btn primary" id="pauseSnakeBtn">Pause Game</button>
-              <div id="snakeScore" class="mono">Score: 0</div>
-            </div>
-            <div class="direction-pad">
-              <button id="upSnake" class="btn">↑</button>
-              <button id="leftSnake" class="btn">←</button>
-              <button id="rightSnake" class="btn">→</button>
-              <button id="downSnake" class="btn">↓</button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1474,6 +2954,11 @@
               <option value="speed">Speed</option>
               <option value="time">Time</option>
               <option value="power">Power</option>
+              <option value="pressure">Pressure</option>
+              <option value="frequency">Frequency</option>
+              <option value="fuelEconomy">Fuel Economy</option>
+              <option value="memory">Memory</option>
+              <option value="dataTransferUnits">Data Transfer Rate</option>
             </select>
           </label>
           <label><span class="muted">Value</span>
@@ -1525,6 +3010,22 @@
         </div>
       </div>
 
+      <!-- Week Day Calculator
+      <div class="card" role="region" aria-labelledby="dayCalculatorTitle">
+        <h3 id="dayCalculatorTitle">Week Day Calculator</h3>
+        <p class="muted">Calculate the week day for a given date.</p>
+        <div class="grid">
+          <label><span class="muted">Select Date:</span>
+            <input id="date" type="date" aria-label="start date" />
+          </label>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="calculateWeekday()">Calculate</button>
+          <button class="btn" onclick="clearWeekday()">Clear</button>
+        </div>
+        <div id="dayOut" class="output mono" role="status" aria-live="polite"></div>
+      </div> -->
+
     </section>
 
     <!-- INFO -->
@@ -1533,7 +3034,7 @@
 
       <!-- About -->
       <div class="card">
-        <h3>NRB CodeWorks — Math & Science tools built for learning.</h3>
+        <h3>Neutroxity — Math & Science tools built for learning.</h3>
         <p class="muted">Hi! I'm NRB, a student who enjoys creating and experimenting with code, design, and
           technology. This website is my personal project space — a place where I build interactive tools, games, and
           learning experiments as I continue improving my programming skills. My goal is to make coding fun, creative,
@@ -1541,9 +3042,50 @@
           each project here is built with curiosity and the drive to learn something new.</p>
       </div>
 
+      <!-- User Login/Logout -->
+      <div class="card">
+        <div id="signUpLoginScreen" class="grid sll-visible">
+          <div>
+            <h3>Sign Up</h3>
+            <div class="row">
+              <label><span class="muted">Enter a username</span>
+                <input type="text" id="signUpUsername" placeholder="Username">
+              </label>
+              <label><span class="muted">Enter a password</span>
+                <input type="password" id="signUpPassword" placeholder="Password">
+              </label>
+              <label><span class="muted"></span><br>
+                <button id="signUp" class="btn" onclick="signUp()">Sign Up</button>
+              </label>
+            </div>
+            <div id="signUpOut" class="output mono"></div>
+          </div>
+          <div>
+            <h3>Login</h3>
+            <div class="row">
+              <label><span class="muted">Enter your username</span>
+                <input type="text" id="loginUsername" placeholder="Username">
+              </label>
+              <label><span class="muted">Enter your password</span>
+                <input type="password" id="loginPassword" placeholder="Password">
+              </label>
+              <label><span class="muted"></span><br>
+                <button id="login" class="btn" onclick="signIn()">Login</button>
+              </label>
+            </div>
+            <div id="loginOut" class="output mono"></div>
+          </div>
+        </div>
+        <div id="profileScreen" class="sll-hidden">
+          <h3>Profile</h3>
+          <button id="logout" class="btn" onclick="signOut()">Logout</button>
+          <div class="output mono" id="profileOut"></div>
+        </div>
+      </div>
+
       <!-- Customization -->
       <div class="card" id="customize">
-        <h3>Customize the website your own way.</h3>
+        <h3>Choose your theme</h3>
         <p class="muted">Choose your theme or create your own theme</p>
         <div id="color-pickers" class="grid">
           <label><span class="muted">Main color first shade:</span><br>
@@ -1558,16 +3100,60 @@
           <label><span class="muted">Background color second shade:</span><br>
             <input class="color-picker" type="color" step="any" id="background2Picker" value="#480A71">
           </label>
+          <label><span class="muted">Card color first shade:</span><br>
+            <input class="color-picker" type="color" step="any" id="card1Picker" value="#0c3b83">
+          </label>
+          <label><span class="muted">Card color second shade:</span><br>
+            <input class="color-picker" type="color" step="any" id="card2Picker" value="#241b77">
+          </label>
         </div>
         <div class="row">
           <button id="resetColors" class="btn">Reset</button>
         </div>
+        <p class="muted">Don't know which colors to choose? Try the ready made themes:</p>
+        <div class="row theme-previews">
+          <button class="theme-btn" data-theme="neutroxity">
+            <div class="preview-box neutroxity"></div>
+            <span>Neutroxity</span>
+          </button>
+          <button class="theme-btn" data-theme="aurora">
+            <div class="preview-box aurora"></div>
+            <span>Aurora</span>
+          </button>
+          <button class="theme-btn" data-theme="neonDark">
+            <div class="preview-box neonDark"></div>
+            <span>Neon Dark</span>
+          </button>
+          <button class="theme-btn" data-theme="cosmicDawn">
+            <div class="preview-box cosmicDawn"></div>
+            <span>Cosmic Dawn</span>
+          </button>
+          <button class="theme-btn" data-theme="galacticVoid">
+            <div class="preview-box galacticVoid"></div>
+            <span>Galactic Void</span>
+          </button>
+        </div>
+        <p class="muted">Wan't to save your own theme to the public or for yourself? Click the submit button.</p>
+        <div class="row">
+          <button class="btn" onclick="saveThemePublic()">Save for public</button>
+          <button class="btn" onclick="saveThemeSelf()">Save only for me</button>
+        </div>
+        <div class="hidden" id="ownThemeSave">
+          <div class="row">
+            <label><span class="muted">Enter a name for your theme:</span>
+              <input type="text" step="any" id="ownThemeName" placeholder="Name for your theme">
+            </label>
+            <label><span></span><br>
+              <button class="btn" id="saveThemeName" onclick="saveThemeName()">Save Theme</button>
+            </label>
+          </div>
+          <br>
+          <div class="output mono" id="ownThemeOut"></div>
+        </div>
       </div>
     </section>
   </main>
-<<<<<<< Updated upstream
   <script src="script.js" defer></script>
-=======
   <!-- Firebase scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -1578,7 +3164,7 @@
   <script src="onstart.js"></script>
   <script src="nonfbdb.js"></script>
   <script src="fbdb.js"></script>
->>>>>>> Stashed changes
+
 </body>
 
 </html>
