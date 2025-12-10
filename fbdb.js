@@ -1,4 +1,3 @@
-// self.FIREBASE_APPCHECK_DEBUG_TOKEN = "09FF694C-E480-43B7-88D7-F22BCC9151AF";
 firebase.initializeApp(def.firebaseConfig);
 firebase.appCheck().activate('6LdEjSYsAAAAAJCfLN8AkM1EOhlr6A89QXr3M39q',true);
 const auth = firebase.auth();
