@@ -1,5 +1,5 @@
 firebase.initializeApp(def.firebaseConfig);
-firebase.appCheck().activate('6LdEjSYsAAAAAJCfLN8AkM1EOhlr6A89QXr3M39q',true);
+firebase.appCheck().activate('6LdfYCgsAAAAAPxZOhlX_AbnHt8otzs3lY9c3cD1',true);
 const auth = firebase.auth();
 auth.onAuthStateChanged(user => {
   if (user) {

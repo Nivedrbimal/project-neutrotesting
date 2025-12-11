@@ -989,13 +989,13 @@ function getId() {
 
     // ------------ Firebase Required -------------
     const firebaseConfig = {
-        apiKey: "AIzaSyBMRNvBhOvERxC7oAaFQ0BseNv_bgQvlhY",
-        authDomain: "neutroxity-11290331.firebaseapp.com",
-        projectId: "neutroxity-11290331",
-        storageBucket: "neutroxity-11290331.firebasestorage.app",
-        messagingSenderId: "182549622864",
-        appId: "1:182549622864:web:5e46945fdfab262126a155",
-        measurementId: "G-PE80W2WR6D"
+        apiKey: "AIzaSyDaQEkGy2NYGlEUjAXs5GKkqPRjAfVnqNs",
+        authDomain: "neutrotech-backup.firebaseapp.com",
+        projectId: "neutrotech-backup",
+        storageBucket: "neutrotech-backup.firebasestorage.app",
+        messagingSenderId: "577271578104",
+        appId: "1:577271578104:web:9d000cd7fc1d54f001aa0d",
+        measurementId: "G-ZX3T3TSGZZ"
     };
     let db = null;
     let currentUser = null;
